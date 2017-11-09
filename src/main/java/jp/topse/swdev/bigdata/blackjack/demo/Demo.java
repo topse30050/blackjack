@@ -14,7 +14,7 @@ public class Demo {
 
     public static void main(String[] args) {
 
-
+/*
     	for (int thr_val = 10; thr_val < 21 ; thr_val ++) {
     		Player[] players = new Player[] {
     				new Player("Aice",new KusanagiDecisionMaker(thr_val)), 
@@ -22,13 +22,25 @@ public class Demo {
     				new Player("Charlie",new KusanagiDecisionMaker(thr_val)),
     				new Player("Dave",new KusanagiDecisionMaker(thr_val)), 
     				new Player("Ellen",new KusanagiDecisionMaker(thr_val)), 
-    				new Player("Frank",new KusanagiDecisionMaker(thr_val))
+    				new Player("Frank")
     		};
     		Demo demo = new Demo(players);
     		demo.eval();
     	}    	
-    }
+*/
+  
 
+	Player[] players = new Player[] {
+				new Player("Aice",new KusanagiDecisionMaker()), 
+				new Player("Bob",new KusanagiDecisionMaker()), 
+				new Player("Charlie",new KusanagiDecisionMaker()),
+				new Player("Dave",new KusanagiDecisionMaker()), 
+				new Player("Ellen",new KusanagiDecisionMaker()), 
+				new Player("Frank")
+		};
+		Demo demo = new Demo(players);
+		demo.eval();
+    }
     private Player[] players = null;
 
     public Demo(Player[] players) {
@@ -46,7 +58,7 @@ public class Demo {
         }
 */  
     	
-    	for (int i = 0; i < 10000;++i) {
+    	for (int i = 0; i < 1000;++i) {
     		doOneGame(players);
     	}
 
