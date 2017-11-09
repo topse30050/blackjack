@@ -14,12 +14,19 @@ public class Demo {
 
     public static void main(String[] args) {
 
-        Player[] players = new Player[] {
-                new Player("Aice"), new Player("Bob"), new Player("Charlie"),
-                new Player("Dave"), new Player("Ellen"), new Player("Frank",new KusanagiDecisionMaker()),
-        };
-        Demo demo = new Demo(players);
-        demo.eval();
+
+    	for (int thr_val = 10; thr_val < 21 ; thr_val ++) {
+    		Player[] players = new Player[] {
+    				new Player("Aice",new KusanagiDecisionMaker(thr_val)), 
+    				new Player("Bob",new KusanagiDecisionMaker(thr_val)), 
+    				new Player("Charlie",new KusanagiDecisionMaker(thr_val)),
+    				new Player("Dave",new KusanagiDecisionMaker(thr_val)), 
+    				new Player("Ellen",new KusanagiDecisionMaker(thr_val)), 
+    				new Player("Frank",new KusanagiDecisionMaker(thr_val))
+    		};
+    		Demo demo = new Demo(players);
+    		demo.eval();
+    	}    	
     }
 
     private Player[] players = null;
@@ -29,19 +36,26 @@ public class Demo {
     }
 
     private void eval() {
-        Permutations<Player> permutations = new Permutations<Player>(players);
+/*
+    	Permutations<Player> permutations = new Permutations<Player>(players);
         while (permutations.hasNext()) {
-            Player[] list = permutations.next();
-            for (int i = 0; i < 2;++i) {
+           Player[] list = permutations.next();
+            for (int i = 0; i < 1;++i) {
                 doOneGame(list);
             }
         }
-    }
+*/  
+    	
+    	for (int i = 0; i < 10000;++i) {
+    		doOneGame(players);
+    	}
 
+    }
+    
 
     private void doOneGame(Player[] players) {
 //        Deck deck = Deck.createDefault();
-//        Deck deck = Deck.createTest1Deck();
+        //Deck deck = Deck.createTest1Deck();
 //        Deck deck = Deck.createTest2Deck();
         Deck deck = Deck.createTest3Deck();
 

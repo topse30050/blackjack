@@ -2,8 +2,23 @@ package jp.topse.swdev.bigdata.blackjack;
 
 import java.util.Map;
 
+//import jp.topse.swdev.bigdata.blackjack.Player.SimpleDecisionMaker;
+
 public class KusanagiDecisionMaker implements DecisionMaker {
-    @Override
+
+	
+    private Integer threshold_value;
+    public KusanagiDecisionMaker(Integer  value) {
+    	threshold_value = value;
+    
+    }
+    public KusanagiDecisionMaker() {
+    	threshold_value = 17;
+    }
+
+	
+	
+	@Override
     public Action decide(Player player, Game game) {
         Map<Player, Hand> playerHands = game.getPlayerHands();
         Hand hand = playerHands.get(player);
@@ -23,7 +38,7 @@ public class KusanagiDecisionMaker implements DecisionMaker {
          */
 
         
-        if (hand.eval()< 17) {
+        if (hand.eval()< threshold_value) {
             return Action.HIT;
         } else {
             return Action.STAND;
