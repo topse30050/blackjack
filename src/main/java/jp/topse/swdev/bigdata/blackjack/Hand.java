@@ -10,6 +10,10 @@ public class Hand {
 
     private List<Card> cards = new LinkedList<Card>();
 
+    public int getCount() {
+        return cards.size();
+    }
+
     public void add(Card card) {
         cards.add(card);
     }
@@ -19,8 +23,18 @@ public class Hand {
     }
 
     public int eval() {
-        return cards.stream()
+        int score = cards.stream()
                 .map(card -> card.getValue())
                 .reduce(0, (sum, n) -> sum + n);
+        int numOfAce = (int)cards.stream()
+                .filter(card -> card.equals(Card.ACE))
+                .count();
+        for (int i = 0; i < numOfAce; ++i) {
+            if (score > 21) {
+                score -= 10;
+            }
+        }
+
+        return score;
     }
 }

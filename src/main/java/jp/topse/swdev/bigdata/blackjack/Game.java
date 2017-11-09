@@ -86,6 +86,9 @@ public class Game {
                 } else if (action == Action.HIT) {
                     playerHands.get(player).add(deck.nextCard());
                 }
+                if (playerHands.get(player).eval() >= 21) {
+                    break;
+                }
             }
         });
 

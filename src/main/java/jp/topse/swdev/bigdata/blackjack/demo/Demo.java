@@ -13,20 +13,46 @@ import jp.topse.swdev.bigdata.blackjack.Result;
 public class Demo {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 1000; ++i) {
-            doOneGame();
+
+        Player[] players = new Player[] {
+                new Player("Aice"), new Player("Bob"), new Player("Charlie"),
+                new Player("Dave"), new Player("Ellen"), new Player("Frank",new KusanagiDecisionMaker()),
+        };
+        Demo demo = new Demo(players);
+        demo.eval();
+    }
+
+    private Player[] players = null;
+
+    public Demo(Player[] players) {
+        this.players = players;
+    }
+
+    private void eval() {
+        Permutations<Player> permutations = new Permutations<Player>(players);
+        while (permutations.hasNext()) {
+            Player[] list = permutations.next();
+            for (int i = 0; i < 2;++i) {
+                doOneGame(list);
+            }
         }
     }
 
-    private static void doOneGame() {
-        Deck deck = Deck.createDefault();
-        
+
+    private void doOneGame(Player[] players) {
+//        Deck deck = Deck.createDefault();
+//        Deck deck = Deck.createTest1Deck();
+//        Deck deck = Deck.createTest2Deck();
+        Deck deck = Deck.createTest3Deck();
+
         Game game = new Game(deck);
-        game.join(new Player("Alice"));
-        game.join(new Player("Bob"));
- 	    game.join(new Player("Charlie"));
-        game.join(new Player("Nagi",new KusanagiDecisionMaker()));
-        game.setup();	
+
+        for (Player player : players) {
+            game.join(player);
+      }
+        
+        game.setup();
+
         game.start();
 
         Result result = game.result();

@@ -177,4 +177,26 @@ public class GameTest {
         assertThat(standings.get(player2), is(Result.Type.LOSE));
     }
 
+    @Test
+    public void gameDoesNotAskDecisionFromPlayerIfThePlayerIsBust() {
+        when(deck.nextCard())
+                .thenReturn(Card.NINE, Card.KING)
+                .thenReturn(Card.QUEEN, Card.FIVE)
+                .thenReturn(Card.SEVEN);
+        Player player = mock(Player.class);
+        when(player.action(game)).thenReturn(Action.HIT);
+        game.join(player);
+
+        game.setup();
+        game.start();
+
+        Result result = game.result();
+        Map<Player, Result.Type> standings = result.getStandings();
+
+        verify(player, times(1)).action(game);
+
+        assertThat(standings.size(), is(1));
+        assertThat(standings.get(player), is(Result.Type.LOSE));
+    }
+
 }
