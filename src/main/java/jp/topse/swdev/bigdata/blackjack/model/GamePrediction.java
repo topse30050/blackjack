@@ -17,7 +17,7 @@ public class GamePrediction {
 
 //	private static final String ARFF_PATH= "src/main/resources/iris.arff";
 	private Classifier classModel;
-    private String classModelFile = "model/j48_deck3_weka3612.model";
+    private String classModelFile = "model/j48_deck3_kusanagi.model";
 
 
 	/**

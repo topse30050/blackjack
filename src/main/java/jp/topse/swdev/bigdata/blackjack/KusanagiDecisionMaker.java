@@ -79,8 +79,10 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 		try {
 			result = prediction.classifySpecies(testValues);
 			if(result.equals("WIN")){
+				System.out.printf("WIN %d",stand_hit);
 		        return 1;			
 			}else{
+				System.out.printf("LOSE %d",stand_hit);
 				return 0;
 			}
 		} catch (Exception e) {
@@ -94,10 +96,10 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 	}	
 	@Override
     public Action decide(Player player, Game game){
-    	if(predictionGame(1,player,game)==1)
-    		return Action.HIT;
-    	else
+    	if(predictionGame(1,player,game)==0 || predictionGame(0,player,game)==1)
     		return Action.STAND;
+    	else
+    		return Action.HIT;
     }
     
 }
