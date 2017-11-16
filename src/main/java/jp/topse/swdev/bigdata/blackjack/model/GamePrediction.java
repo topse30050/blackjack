@@ -17,7 +17,7 @@ public class GamePrediction {
 
 //	private static final String ARFF_PATH= "src/main/resources/iris.arff";
 	private Classifier classModel;
-    private String classModelFile = "model/j48_deck3_kusanagi.model";
+    private String classModelFile = "model/svm_deck3_kusanagi.model";
 
 
 	/**
@@ -70,11 +70,43 @@ public class GamePrediction {
         species = new Attribute("class", dataClasses);
 
         //  Create the object to classify on.
+        /*
         for (Enumeration<String> keys = play_game.keys(); keys.hasMoreElements(); ) {
             String key = keys.nextElement();
             dataAttribs.addElement(new Attribute(key));
             values[i++] = play_game.get(key);
         }
+        */
+        dataAttribs.addElement(new Attribute("dealer_card"));
+        values[i++] = play_game.get("dealer_card");
+        dataAttribs.addElement(new Attribute("player1_card_sum"));
+        values[i++] = play_game.get("player1_card_sum");
+        dataAttribs.addElement(new Attribute("stand_hit"));
+        values[i++] = play_game.get("stand_hit");
+        dataAttribs.addElement(new Attribute("player2_card_1"));
+        values[i++] = play_game.get("player2_card_1");
+        dataAttribs.addElement(new Attribute("player2_card_2"));
+        values[i++] = play_game.get("player2_card_2");
+        dataAttribs.addElement(new Attribute("player3_card_1"));
+        values[i++] = play_game.get("player3_card_1");
+        dataAttribs.addElement(new Attribute("player3_card_2"));
+        values[i++] = play_game.get("player3_card_2");
+        dataAttribs.addElement(new Attribute("player4_card_1"));
+        values[i++] = play_game.get("player4_card_1");
+        dataAttribs.addElement(new Attribute("player4_card_2"));
+        values[i++] = play_game.get("player4_card_2");
+        dataAttribs.addElement(new Attribute("player5_card_1"));
+        values[i++] = play_game.get("player5_card_1");
+        dataAttribs.addElement(new Attribute("player5_card_2"));
+        values[i++] = play_game.get("player5_card_2");
+        dataAttribs.addElement(new Attribute("player6_card_1"));
+        values[i++] = play_game.get("player6_card_1");
+        dataAttribs.addElement(new Attribute("player6_card_2"));
+        values[i++] = play_game.get("player6_card_2");
+
+        
+        
+        
         dataAttribs.addElement(species);
         Instances dataModel = new Instances("classify", dataAttribs, 0);
         dataModel.setClass(species);
