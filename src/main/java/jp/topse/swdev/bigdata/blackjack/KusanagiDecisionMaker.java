@@ -79,10 +79,10 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 		try {
 			result = prediction.classifySpecies(testValues);
 			if(result.equals("WIN")){
-				System.out.printf("WIN %d",stand_hit);
+		//		System.out.printf("WIN %d",stand_hit);
 		        return 1;			
 			}else{
-				System.out.printf("LOSE %d",stand_hit);
+				//System.out.printf("LOSE %d",stand_hit);
 				return 0;
 			}
 		} catch (Exception e) {
