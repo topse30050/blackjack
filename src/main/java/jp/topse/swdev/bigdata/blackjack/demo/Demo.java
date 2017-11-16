@@ -1,9 +1,6 @@
 package jp.topse.swdev.bigdata.blackjack.demo;
 
-import jp.topse.swdev.bigdata.blackjack.Deck;
-import jp.topse.swdev.bigdata.blackjack.Game;
-import jp.topse.swdev.bigdata.blackjack.Player;
-import jp.topse.swdev.bigdata.blackjack.Result;
+import jp.topse.swdev.bigdata.blackjack.*;
 
 /**
  * Created by doi on 2017/09/28.
