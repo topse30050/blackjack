@@ -1,11 +1,15 @@
 package jp.topse.swdev.bigdata.blackjack.demo;
 
+<<<<<<< HEAD
 import jp.topse.swdev.bigdata.blackjack.DecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Deck;
 import jp.topse.swdev.bigdata.blackjack.Game;
 import jp.topse.swdev.bigdata.blackjack.KusanagiDecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
+=======
+import jp.topse.swdev.bigdata.blackjack.*;
+>>>>>>> c8ea6d6abf685f1ce83a1d7025ea04912b25d82e
 
 /**
  * Created by doi on 2017/09/28.
