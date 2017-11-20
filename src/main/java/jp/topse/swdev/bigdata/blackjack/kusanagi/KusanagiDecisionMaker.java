@@ -11,19 +11,19 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 
     GamePrediction prediction;
     private Integer threshold_value;
-    public KusanagiDecisionMaker(Integer  value) {
+    public KusanagiDecisionMaker(int index, int value) {
         threshold_value = value;
         try {
-            prediction = new GamePrediction();
+            prediction = new GamePrediction(index);
         } catch (Exception e){
             System.out.println(e);
         }
 
     }
-    public KusanagiDecisionMaker() {
+    public KusanagiDecisionMaker(int index) {
         threshold_value = 17;
         try {
-            prediction = new GamePrediction();
+            prediction = new GamePrediction(index);
         } catch (Exception e){
             System.out.println(e);
         }

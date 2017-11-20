@@ -16,10 +16,14 @@ public class HyogoDecisionMaker implements DecisionMaker {
     static int count = 1;
     // TODO 以下の変数は環境に応じて変更する
     static final String MYNAME = "Hyogo";
-    static final String MODEL3rd_FILE_PATH = "./models/hyogo/3rdCard_hyogo.model";
-    static final String MODEL4th_FILE_PATH = "./models/hyogo/4thCard_hyogo.model";
-    static final String MODEL5th_FILE_PATH = "./models/hyogo/5thCard_hyogo.model";
+    static final String MODEL_BASE_PATH = "./models/hyogo";
+//    static final String MODEL3rd_FILE_PATH = "./models/hyogo/3rdCard_hyogo.model";
+//    static final String MODEL4th_FILE_PATH = "./models/hyogo/4thCard_hyogo.model";
+//    static final String MODEL5th_FILE_PATH = "./models/hyogo/5thCard_hyogo.model";
 
+    private Classifier classifier3rd = null;
+	private Classifier classifier4th = null;
+	private Classifier classifier5th = null;
 
 	@Override
 	public Action decide(Player player, Game game) {
@@ -31,7 +35,7 @@ public class HyogoDecisionMaker implements DecisionMaker {
 		// 3枚目のカードを引くかどうかを判断する
 		if (count ==1) {
 	        try {
-	        	Classifier classifier = (Classifier)SerializationHelper.read(MODEL3rd_FILE_PATH);
+	        	Classifier classifier = classifier3rd;
 	        
 	        	FastVector rl = new FastVector(3);
 	            rl.addElement("WIN");
@@ -160,7 +164,7 @@ public class HyogoDecisionMaker implements DecisionMaker {
         }  else if (count == 2) {
         	// 4枚目のカードを引くかどうかを判断する
         	try {
-	        	Classifier classifier = (Classifier)SerializationHelper.read(MODEL4th_FILE_PATH);
+	        	Classifier classifier = classifier4th;
 	        
 	        	FastVector rl = new FastVector(3);
 	            rl.addElement("WIN");
@@ -311,7 +315,7 @@ public class HyogoDecisionMaker implements DecisionMaker {
         } else if (count == 3) {
         	//5枚目のカードを引くかどうかを判断する
         	try {
-	        	Classifier classifier = (Classifier)SerializationHelper.read(MODEL5th_FILE_PATH);
+	        	Classifier classifier = classifier5th;
 	        
 	        	FastVector rl = new FastVector(3);
 	            rl.addElement("WIN");
@@ -484,7 +488,14 @@ public class HyogoDecisionMaker implements DecisionMaker {
         }
     }
 
-	public HyogoDecisionMaker() {
+	public HyogoDecisionMaker(int index) {
+		try {
+			classifier3rd = (Classifier)SerializationHelper.read(MODEL_BASE_PATH + "/deck" + index + "/3rdCard_hyogo.model");
+			classifier4th = (Classifier)SerializationHelper.read(MODEL_BASE_PATH + "/deck" + index + "/4thCard_hyogo.model");
+			classifier5th = (Classifier)SerializationHelper.read(MODEL_BASE_PATH + "/deck" + index + "/5thCard_hyogo.model");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -136,8 +136,8 @@ public class MyDecisionMaker implements DecisionMaker {
        }
    }
 
-   public MyDecisionMaker() {
-       String name = "3";
+   public MyDecisionMaker(int index) {
+       String name = String.valueOf(index);
        MyClassifier app = new MyClassifier();
 
        try {
@@ -280,7 +280,7 @@ public class MyDecisionMaker implements DecisionMaker {
 	}
 
     private static void createTrainDataByMyself(String className, String[] constructorArgs, String[] options, String trainDataPath) throws IOException {
-        Player player = new Player("TSUBASA" , new MyDecisionMaker());
+        Player player = new Player("TSUBASA" , new MyDecisionMaker(0));
 
 		try(FileWriter fw = new FileWriter("myresult.csv");) {
             for (int i = 0; i < 1000000; ++i) {

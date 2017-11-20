@@ -29,7 +29,7 @@ public class GamePrediction {
         System.out.println("test");
         GamePrediction prediction;
         try {
-            prediction = new GamePrediction();
+            prediction = new GamePrediction(0);
             Hashtable<String, Double> testValues = new Hashtable<>();
             testValues.put("dealer_card", 10.0/10);
             testValues.put("player1_card_sum", 10.0/10);
@@ -52,7 +52,7 @@ public class GamePrediction {
 
 
     }
-    public GamePrediction() throws Exception{
+    public GamePrediction(int index) throws Exception{
         classModel = (Classifier) weka.core.SerializationHelper.read(classModelFile);
     }
 

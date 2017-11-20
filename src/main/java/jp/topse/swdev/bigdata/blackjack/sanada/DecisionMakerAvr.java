@@ -37,7 +37,7 @@ public class DecisionMakerAvr implements DecisionMaker {
 	double average = 0;
 	
 	// コンストラクタ
-	public DecisionMakerAvr() {
+	public DecisionMakerAvr(int index) {
 		try {
 			// カード平均値取得
 			this.average = getAverage();

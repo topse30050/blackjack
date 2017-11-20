@@ -27,6 +27,19 @@ public class Deck {
         return new Deck(map);
     }
 
+    public static Deck createTestDeck(int index) {
+        switch (index) {
+            case 1:
+                return createTest1Deck();
+            case 2:
+                return createTest2Deck();
+            case 3:
+                return createTest3Deck();
+            default:
+                throw new RuntimeException("Invalid Test Deck Index");
+        }
+    }
+
     public static Deck createTest1Deck() {
         Map<Card, Integer> map = new HashMap<Card, Integer>();
         map.put(Card.TWO,   5);
