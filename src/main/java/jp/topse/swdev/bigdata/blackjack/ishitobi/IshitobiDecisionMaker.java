@@ -68,6 +68,11 @@ public class IshitobiDecisionMaker implements DecisionMaker {
 		String tp62 = frank_hand.get(1).name();           
 		String tp63 = "";
 		String tp64 = "";
+		String tm11 = hand.get(0).name();
+		String tm12 = hand.get(1).name();
+		String tm13 = "";
+		String tm14 = "";
+		
 		
 //ここから実際の処理
 
@@ -80,67 +85,97 @@ public class IshitobiDecisionMaker implements DecisionMaker {
     	}
     	//三枚目の判定
     	else if(hand.getCount() == 2){
-    		double result = svc3rd.main(td1,tp11,tp12,tp21,tp22,tp31,tp32,tp41,tp42,tp51,tp52,tp61,tp62);
-			if(result == 0){
-    			return Action.STAND;
-    		}else{
+    		if(hand.eval() <= 11){
     			return Action.HIT;
+    		}
+    		else if(hand.eval() == 21){
+    			return Action.STAND;
+    		}
+    		else{
+    			double result = svc3rd.main(td1,tp11,tp12,tp21,tp22,tp31,tp32,tp41,tp42,tp51,tp52,tp61,tp62,tm11,tm12);
+    			if(result == 0){
+    				return Action.STAND;
+    			}else{
+    				return Action.HIT;
+    			}
     		}
        	}
+    		
     	//四枚目の判定
     	else if(hand.getCount() == 3){
-    		if(alice_hand.getCount() >= 3){
-    		 tp13 = alice_hand.get(2).name();
-    		}
-    		if(bob_hand.getCount() >= 3){
-    		 tp23 = bob_hand.get(2).name();   		
-    		}
-    		if(charlie_hand.getCount() >= 3){
-    		 tp33 = charlie_hand.get(2).name();  		
-    		}
-    		if(dave_hand.getCount() >= 3){
-    		 tp43 = dave_hand.get(2).name();
-    		}
-    		if(ellen_hand.getCount() >= 3){
-    		 tp53 = ellen_hand.get(2).name();    		
-    		}
-    		if(frank_hand.getCount() >= 3){
-    		 tp63 = frank_hand.get(2).name();    		
-    		}
-    		double result = svc4th.main(td1,tp11,tp12,tp13,tp21,tp22,tp23,tp31,tp32,tp33,tp41,tp42,tp43,tp51,tp52,tp53,tp61,tp62,tp63);
-			if(result == 0){
-    			return Action.STAND;
-    		}else{
+    		if(hand.eval() <= 11){
     			return Action.HIT;
+    		}
+    		else if(hand.eval() == 21){
+    			return Action.STAND;
+    		}
+    		else{
+    			if(hand.getCount() >= 3){
+    				tm13 = hand.get(2).name();
+    			}
+	    		if(alice_hand.getCount() >= 3){
+	    		 tp13 = alice_hand.get(2).name();
+	    		}
+	    		if(bob_hand.getCount() >= 3){
+	    		 tp23 = bob_hand.get(2).name();   		
+	    		}
+	    		if(charlie_hand.getCount() >= 3){
+	    		 tp33 = charlie_hand.get(2).name();  		
+	    		}
+	    		if(dave_hand.getCount() >= 3){
+	    		 tp43 = dave_hand.get(2).name();
+	    		}
+	    		if(ellen_hand.getCount() >= 3){
+	    		 tp53 = ellen_hand.get(2).name();    		
+	    		}
+	    		if(frank_hand.getCount() >= 3){
+	    		 tp63 = frank_hand.get(2).name();    		
+	    		}
+	    		double result = svc4th.main(td1,tp11,tp12,tp13,tp21,tp22,tp23,tp31,tp32,tp33,tp41,tp42,tp43,tp51,tp52,tp53,tp61,tp62,tp63,tm11,tm12,tm13);
+				if(result == 0){
+	    			return Action.STAND;
+	    		}else{
+	    			return Action.HIT;
+	    		}
     		}
     	}
     	//五枚目の判定
     	else {
-		
-    		if(alice_hand.getCount() >= 4){
-       		 tp14 = alice_hand.get(3).name();
-       		}
-       		if(bob_hand.getCount() >= 4){
-       		 tp24 = bob_hand.get(3).name();   		
-       		}
-       		if(charlie_hand.getCount() >= 4){
-       		 tp34 = charlie_hand.get(3).name();  		
-       		}
-       		if(dave_hand.getCount() >= 4){
-       		 tp44 = dave_hand.get(3).name();
-       		}
-       		if(ellen_hand.getCount() >= 4){
-       		 tp54 = ellen_hand.get(3).name();    		
-       		}
-       		if(frank_hand.getCount() >= 4){
-       		 tp64 = frank_hand.get(3).name();    		
-       		}		
-    		
-    		double result = svc5th.main(td1,tp11,tp12,tp13,tp14,tp21,tp22,tp23,tp24,tp31,tp32,tp33,tp34,tp41,tp42,tp43,tp44,tp51,tp52,tp53,tp54,tp61,tp62,tp63,tp64);
-			if(result == 0){
-    			return Action.STAND;
-    		}else{
+    		if(hand.eval() <= 11){
     			return Action.HIT;
+    		}
+    		else if(hand.eval() == 21){
+    			return Action.STAND;
+    		}
+    		else{	
+    			if(hand.getCount() >= 4){
+    				tm14 = hand.get(3).name();
+    			}
+	    		if(alice_hand.getCount() >= 4){
+	       		 tp14 = alice_hand.get(3).name();
+	       		}
+	       		if(bob_hand.getCount() >= 4){
+	       		 tp24 = bob_hand.get(3).name();   		
+	       		}
+	       		if(charlie_hand.getCount() >= 4){
+	       		 tp34 = charlie_hand.get(3).name();  		
+	       		}
+	       		if(dave_hand.getCount() >= 4){
+	       		 tp44 = dave_hand.get(3).name();
+	       		}
+	       		if(ellen_hand.getCount() >= 4){
+	       		 tp54 = ellen_hand.get(3).name();    		
+	       		}
+	       		if(frank_hand.getCount() >= 4){
+	       		 tp64 = frank_hand.get(3).name();    		
+	       		}		
+	    		
+	    		double result = svc5th.main(td1,tp11,tp12,tp13,tp14,tp21,tp22,tp23,tp24,tp31,tp32,tp33,tp34,tp41,tp42,tp43,tp44,tp51,tp52,tp53,tp54,tp61,tp62,tp63,tp64,tm11,tm12,tm13,tm14);
+				if(result == 0){
+	    			return Action.STAND;
+	    		}else{
+	    			return Action.HIT;
+	    		}
     		}
     	}
 	}
