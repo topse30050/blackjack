@@ -7,6 +7,7 @@ import jp.topse.swdev.bigdata.blackjack.sanada.DecisionMakerAvr;
 import jp.topse.swdev.bigdata.blackjack.yamamoto.MyDecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.yoshimura.yoshi_DecisionMaker;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,57 +18,39 @@ public class Competition {
 
     public static void main(String[] args) {
         Competition competition = new Competition();
-//        competition.game1();
-//        competition.game2();
-        competition.game3();
+        competition.game();
     }
 
-    public Competition() {
+    public void game() {
+        for (int i = 1; i <= 3; ++i) {
+            game(i);
+        }
     }
 
-    public void game1() {
-        Deck deck = Deck.createTest1Deck();
-        Player[] players = new Player[] {
-                new Player("Yamamoto", new MyDecisionMaker()),
-                new Player("Ishitobi", new IshitobiDecisionMaker()),
-                new Player("Yoshimura", new yoshi_DecisionMaker()),
-                new Player("Hyogo", new HyogoDecisionMaker()),
-                new Player("Sanada", new DecisionMakerAvr()),
-                new Player("Kusanagi", new KusanagiDecisionMaker()),
-        };
-        Map<Player, Integer> pointsMap = eval(players, deck);
-        showResult("Game1", pointsMap);
+    private void game(int index) {
+        PrintWriter logger = null;
+        try {
+            logger = new PrintWriter(new BufferedWriter(new FileWriter("./logs/" + index + ".csv", false)));
+
+            Deck deck = Deck.createTestDeck(index);
+            Player[] players = new Player[]{
+                    new Player("Hyogo", new HyogoDecisionMaker(index)),
+                    new Player("Ishitobi", new IshitobiDecisionMaker(index)),
+                    new Player("Kusanagi", new KusanagiDecisionMaker(index)),
+                    new Player("Sanada", new DecisionMakerAvr(index)),
+                    new Player("Yamamoto", new MyDecisionMaker(index)),
+                    new Player("Yoshimura", new yoshi_DecisionMaker(index)),
+            };
+            Map<Player, Integer> pointsMap = eval(players, deck, logger);
+            showResult("Game " + index, pointsMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            logger.close();
+        }
     }
 
-    public void game2() {
-        Deck deck = Deck.createTest2Deck();
-        Player[] players = new Player[] {
-                new Player("Yamamoto", new MyDecisionMaker()),
-                new Player("Ishitobi", new IshitobiDecisionMaker()),
-                new Player("Yoshimura", new yoshi_DecisionMaker()),
-                new Player("Hyogo", new HyogoDecisionMaker()),
-                new Player("Sanada", new DecisionMakerAvr()),
-                new Player("Kusanagi", new KusanagiDecisionMaker()),
-        };
-        Map<Player, Integer> pointsMap = eval(players, deck);
-        showResult("Game2", pointsMap);
-    }
-
-    public void game3() {
-        Deck deck = Deck.createTest3Deck();
-        Player[] players = new Player[] {
-                new Player("Yamamoto", new MyDecisionMaker()),
-                new Player("Ishitobi", new IshitobiDecisionMaker()),
-                new Player("Yoshimura", new yoshi_DecisionMaker()),
-                new Player("Hyogo", new HyogoDecisionMaker()),
-                new Player("Sanada", new DecisionMakerAvr()),
-                new Player("Kusanagi", new KusanagiDecisionMaker()),
-        };
-        Map<Player, Integer> pointsMap = eval(players, deck);
-        showResult("Game3", pointsMap);
-    }
-
-    private Map<Player, Integer> eval(Player[] players, Deck deck) {
+    private Map<Player, Integer> eval(Player[] players, Deck deck, PrintWriter logger) {
         Map<Player, Integer> pointsMap = new HashMap<Player, Integer>();
         for (Player player : players) {
             pointsMap.put(player, 0);
@@ -77,7 +60,7 @@ public class Competition {
         while (permutations.hasNext()) {
             Player[] list = permutations.next();
             for (int i = 0; i < 1; ++i) {
-                Map<Player, Result.Type> standings = doOneGame(list, deck);
+                Map<Player, Result.Type> standings = doOneGame(list, deck, logger);
                 for (Player player : players) {
                     if (standings.get(player) == Result.Type.WIN) {
                         int point = pointsMap.get(player);
@@ -91,7 +74,7 @@ public class Competition {
         return pointsMap;
     }
 
-    private Map<Player, Result.Type> doOneGame(Player[] players, Deck deck) {
+    private Map<Player, Result.Type> doOneGame(Player[] players, Deck deck, PrintWriter logger) {
         deck.reset();
         Game game = new Game(deck);
 
@@ -101,7 +84,9 @@ public class Competition {
         game.setup();
         game.start();
 
-        return game.result().getStandings();
+        Result result = game.result();
+        logger.println(result.toString());
+        return result.getStandings();
     }
 
     private void showResult(String name, Map<Player, Integer> pointsMap) {

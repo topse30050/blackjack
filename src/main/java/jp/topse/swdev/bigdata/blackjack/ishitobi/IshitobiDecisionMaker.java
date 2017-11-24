@@ -14,6 +14,16 @@ import jp.topse.swdev.bigdata.blackjack.ishitobi.DecisionSVC5th;
 
 public class IshitobiDecisionMaker implements DecisionMaker {
 
+	private DecisionSVC3rd svc3rd = null;
+	private DecisionSVC4th svc4th = null;
+	private DecisionSVC5th svc5th = null;
+
+	public IshitobiDecisionMaker(int index) {
+		 svc3rd = new DecisionSVC3rd(index);
+		 svc4th = new DecisionSVC4th(index);
+		 svc5th = new DecisionSVC5th(index);
+	}
+
 	@Override
 	public Action decide(Player player, Game game) {
 		// TODO Auto-generated method stub
@@ -59,10 +69,7 @@ public class IshitobiDecisionMaker implements DecisionMaker {
 		String tp63 = "";
 		String tp64 = "";
 		
-//ここから実際の処理		
-        DecisionSVC3rd svc3rd = new DecisionSVC3rd();
-        DecisionSVC4th svc4th = new DecisionSVC4th();
-        DecisionSVC5th svc5th = new DecisionSVC5th();
+//ここから実際の処理
 
     	if(hand.getCount() == 0){
     		return Action.HIT;

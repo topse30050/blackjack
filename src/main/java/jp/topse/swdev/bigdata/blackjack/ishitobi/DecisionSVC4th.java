@@ -12,7 +12,39 @@ import weka.core.converters.ConverterUtils.DataSource;
 
 
 public class DecisionSVC4th {
-		public static void main(String[] args) {
+
+	private Classifier classifier = null;
+	private FastVector card = null;
+	private FastVector ac = null;
+
+	public DecisionSVC4th(int index) {
+		try {
+			classifier = (Classifier) SerializationHelper.read("./models/ishitobi/ishitobi_SVC4th_test" + index + ".model");
+
+			card = new FastVector(13);
+			card.addElement("ACE");
+			card.addElement("TWO");
+			card.addElement("THREE");
+			card.addElement("FOUR");
+			card.addElement("FIVE");
+			card.addElement("SIX");
+			card.addElement("SEVEN");
+			card.addElement("EIGHT");
+			card.addElement("NINE");
+			card.addElement("TEN");
+			card.addElement("JACK");
+			card.addElement("QUEEN");
+			card.addElement("KING");
+
+			ac = new FastVector(2);
+			ac.addElement("STAND");
+			ac.addElement("HIT");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
 			try {
 		      DataSource source = new DataSource("tr_SVC4th_testdeck3_17.arff");
 		      Instances instances = source.getDataSet();
@@ -32,27 +64,6 @@ public class DecisionSVC4th {
 
 	  public double main(String td1,String tp11,String tp12,String tp13,String tp21,String tp22,String tp23,String tp31,String tp32,String tp33,String tp41,String tp42,String tp43,String tp51,String tp52,String tp53,String tp61,String tp62,String tp63) {
 	    try {
-	    	
-	    	Classifier classifier = (Classifier)SerializationHelper.read("./models/ishitobi/ishitobi_SVC4th_test3.model");
-
-	      FastVector card = new FastVector(13);
-	       card.addElement("ACE");
-	       card.addElement("TWO");
-	       card.addElement("THREE");
-	       card.addElement("FOUR");
-	       card.addElement("FIVE");
-	       card.addElement("SIX");
-	       card.addElement("SEVEN");
-	       card.addElement("EIGHT");
-	       card.addElement("NINE");
-	       card.addElement("TEN");
-	       card.addElement("JACK");
-	       card.addElement("QUEEN");
-	       card.addElement("KING");     
-	      FastVector ac = new FastVector(2);
-	       ac.addElement("STAND");
-	       ac.addElement("HIT");        
-	       
 	      Attribute d1 = new Attribute("d1", card); 
 	      Attribute p11 = new Attribute("p11", card);
 	      Attribute p12 = new Attribute("p12", card); 

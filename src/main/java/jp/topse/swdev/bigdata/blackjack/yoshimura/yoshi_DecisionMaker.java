@@ -24,10 +24,26 @@ import weka.core.Instances;
 public class yoshi_DecisionMaker implements DecisionMaker{
 
 	//private static final String MODEL_PATH= "./src/main/resources/blackjack.model";
-	private static final String MODEL_PATH= "./models/yoshimura/blackjack-yoshi-1.model";
+    private static final String MODEL_BASE_PATH = "./models/yoshimura/blackjack-yoshi-";
+	//private static final String MODEL_PATH= "./models/yoshimura/blackjack-yoshi-1.model";
 	//private static final String MODEL_PATH_T1= "./src/main/resources/blackjack-t1.model";
 	//private static final String MODEL_PATH_T2= "./src/main/resources/blackjack-t2.model";
 	//private static final String MODEL_PATH_T3= "./src/main/resources/blackjack-t3.model";
+
+    private  Classifier cls_1 = null;
+    // private  Classifier cls_2 = null;
+    // private  Classifier cls_3 = null;
+
+    public yoshi_DecisionMaker(int index) {
+        // モデル読み込み
+        try {
+            cls_1 = (Classifier) weka.core.SerializationHelper.read(MODEL_BASE_PATH + index + ".model");
+            //Classifier cls_2 = (Classifier) weka.core.SerializationHelper.read(MODEL_PATH_T2);
+            //Classifier cls_3 = (Classifier) weka.core.SerializationHelper.read(MODEL_PATH_T3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public Action decide(Player player, Game game) {
@@ -81,11 +97,6 @@ public class yoshi_DecisionMaker implements DecisionMaker{
 
             stand_testdata.add(new Instance(1.0, standtvalues));
             stand_testdata.setClassIndex(stand_testdata.numAttributes() - 1);
-
-            // モデル読み込み
-            Classifier cls_1 = (Classifier) weka.core.SerializationHelper.read(MODEL_PATH);
-            //Classifier cls_2 = (Classifier) weka.core.SerializationHelper.read(MODEL_PATH_T2);
-            //Classifier cls_3 = (Classifier) weka.core.SerializationHelper.read(MODEL_PATH_T3);
 
             double label_ht = cls_1.classifyInstance(testdata.instance(0));
             double[] probabilities_ht = cls_1.distributionForInstance(testdata.instance(0));
