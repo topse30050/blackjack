@@ -70,6 +70,7 @@ public class CSVReader {
 				value+=a[i+1];
 			}
 		}
+		Arrays.sort(a);
 		return a;
 	}
 
