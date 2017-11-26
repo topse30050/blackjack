@@ -11,6 +11,7 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 
     GamePrediction prediction;
     private Integer threshold_value;
+    private int deck_type;
     public KusanagiDecisionMaker(int index, int value) {
         threshold_value = value;
         try {
@@ -21,7 +22,8 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 
     }
     public KusanagiDecisionMaker(int index) {
-        threshold_value = 17;
+    	deck_type = index;
+        threshold_value = 18;
         try {
             prediction = new GamePrediction(index);
         } catch (Exception e){
@@ -44,6 +46,10 @@ public class KusanagiDecisionMaker implements DecisionMaker {
 
             if(player.getName().equals(name)){
                 Hand my_hand = playerHands.get(p);
+                double card1=(double)my_hand.get(0).getValue();
+                double card2=(double)my_hand.get(1).getValue();
+                testValues.put("player1_card_1", card1);
+                testValues.put("player1_card_2", card2);
                 testValues.put("player1_card_sum",(double)my_hand.eval());
                 testValues.put("stand_hit", (double)stand_hit);
             }
@@ -81,6 +87,8 @@ public class KusanagiDecisionMaker implements DecisionMaker {
             if(result.equals("WIN")){
                 //		System.out.printf("WIN %d",stand_hit);
                 return 1;
+            }else if(result.equals("DRAW")){
+                return 2;
             }else{
                 //System.out.printf("LOSE %d",stand_hit);
                 return 0;
@@ -96,10 +104,23 @@ public class KusanagiDecisionMaker implements DecisionMaker {
     }
     @Override
     public Action decide(Player player, Game game){
-        if(predictionGame(1,player,game)==0 || predictionGame(0,player,game)==1)
-            return Action.STAND;
-        else
-            return Action.HIT;
+    	if(deck_type == 1  || deck_type == 2) {
+            Map<Player, Hand> playerHands = game.getPlayerHands();
+            Hand hand = playerHands.get(player);
+            if (hand.eval()< threshold_value) {
+            	return Action.HIT;
+            } else {
+            	if(predictionGame(1,player,game)==0 || predictionGame(0,player,game)==1 || predictionGame(0,player,game)==2)
+            		return Action.STAND;
+                else
+                	return Action.HIT;
+           }
+        }else {
+        	if(predictionGame(1,player,game)==0 || predictionGame(0,player,game)==1 || predictionGame(0,player,game)==2)
+        		return Action.STAND;
+            else
+                return Action.HIT;
+        }
+        
     }
-
 }
