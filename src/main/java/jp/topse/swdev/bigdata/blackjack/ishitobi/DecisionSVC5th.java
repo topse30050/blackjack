@@ -46,9 +46,9 @@ public class DecisionSVC5th {
 
     public static void main(String[] args) {
         try {
-            DataSource source = new DataSource("tr_SVC5th_testdeck3_17.arff");
+            DataSource source = new DataSource("tr_SVC5th_testdeck3.arff");
             Instances instances = source.getDataSet();
-            instances.setClassIndex(25);
+            instances.setClassIndex(29);
             Classifier classifier = new SMO();
             classifier.buildClassifier(instances);
 
@@ -62,7 +62,7 @@ public class DecisionSVC5th {
         }
     }
 
-    public double main(String td1, String tp11, String tp12, String tp13, String tp14, String tp21, String tp22, String tp23, String tp24, String tp31, String tp32, String tp33, String tp34, String tp41, String tp42, String tp43, String tp44, String tp51, String tp52, String tp53, String tp54, String tp61, String tp62, String tp63, String tp64) {
+    public double main(String td1, String tp11, String tp12, String tp13, String tp14, String tp21, String tp22, String tp23, String tp24, String tp31, String tp32, String tp33, String tp34, String tp41, String tp42, String tp43, String tp44, String tp51, String tp52, String tp53, String tp54, String tp61, String tp62, String tp63, String tp64, String tm11, String tm12, String tm13, String tm14) {
         try {
 
 
@@ -97,6 +97,10 @@ public class DecisionSVC5th {
             Attribute p63 = new Attribute("p63", card);
             Attribute p64 = new Attribute("p64", card);
             Attribute p65 = new Attribute("p65", card);
+  	        Attribute m11 = new Attribute("m11", card);
+  	        Attribute m12 = new Attribute("m12", card);
+  	        Attribute m13 = new Attribute("m13", card);
+  	        Attribute m14 = new Attribute("m14", card);
             Attribute action3 = new Attribute("action3", ac);
             Attribute action4 = new Attribute("action4", ac);
             Attribute action5 = new Attribute("action5", ac);
@@ -134,12 +138,16 @@ public class DecisionSVC5th {
             attributes.addElement(p63);
             attributes.addElement(p64);
 //	      attributes.addElement(p65);
+  	      attributes.addElement(m11);
+  	      attributes.addElement(m12);
+  	      attributes.addElement(m13);
+  	      attributes.addElement(m14);
 //	      attributes.addElement(action3);
 //	      attributes.addElement(action4);
             attributes.addElement(action5);
 
             Instances data = new Instances("SVC5thInstances", attributes, 0);
-            data.setClassIndex(25);
+            data.setClassIndex(29);
 
             Instance instance = new Instance(data.numAttributes());
             instance.setDataset(data);
@@ -169,6 +177,10 @@ public class DecisionSVC5th {
             instance.setValue(p62, card.indexOf(tp62));
             instance.setValue(p63, card.indexOf(tp63));
             instance.setValue(p13, card.indexOf(tp64));
+  	      instance.setValue(m11, card.indexOf(tm11));
+  	      instance.setValue(m12, card.indexOf(tm12));	
+  	      instance.setValue(m13, card.indexOf(tm13));	
+  	      instance.setValue(m14, card.indexOf(tm14));	
 
             double result = classifier.classifyInstance(instance);
 //	      System.out.println(result);
