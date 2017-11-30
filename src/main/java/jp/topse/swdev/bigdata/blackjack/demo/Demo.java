@@ -1,15 +1,12 @@
 package jp.topse.swdev.bigdata.blackjack.demo;
 
-<<<<<<< HEAD
 import jp.topse.swdev.bigdata.blackjack.DecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Deck;
 import jp.topse.swdev.bigdata.blackjack.Game;
 import jp.topse.swdev.bigdata.blackjack.KusanagiDecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
-=======
 import jp.topse.swdev.bigdata.blackjack.*;
->>>>>>> c8ea6d6abf685f1ce83a1d7025ea04912b25d82e
 
 /**
  * Created by doi on 2017/09/28.
@@ -17,24 +14,7 @@ import jp.topse.swdev.bigdata.blackjack.*;
 public class Demo {
 
     public static void main(String[] args) {
-
-/*
-    	for (int thr_val = 10; thr_val < 21 ; thr_val ++) {
-    		Player[] players = new Player[] {
-    				new Player("Aice",new KusanagiDecisionMaker(thr_val)), 
-    				new Player("Bob",new KusanagiDecisionMaker(thr_val)), 
-    				new Player("Charlie",new KusanagiDecisionMaker(thr_val)),
-    				new Player("Dave",new KusanagiDecisionMaker(thr_val)), 
-    				new Player("Ellen",new KusanagiDecisionMaker(thr_val)), 
-    				new Player("Frank")
-    		};
-    		Demo demo = new Demo(players);
-    		demo.eval();
-    	}    	
-*/
-  
-
-	Player[] players = new Player[] {
+    	Player[] players = new Player[] {
 				new Player("Aice",new KusanagiDecisionMaker()), 
 				new Player("Bob",new KusanagiDecisionMaker()), 
 				new Player("Charlie",new KusanagiDecisionMaker()),
@@ -52,20 +32,9 @@ public class Demo {
     }
 
     private void eval() {
-/*
-    	Permutations<Player> permutations = new Permutations<Player>(players);
-        while (permutations.hasNext()) {
-           Player[] list = permutations.next();
-            for (int i = 0; i < 1;++i) {
-                doOneGame(list);
-            }
-        }
-*/  
-    	
     	for (int i = 0; i < 1000;++i) {
     		doOneGame(players);
     	}
-
     }
     
 
