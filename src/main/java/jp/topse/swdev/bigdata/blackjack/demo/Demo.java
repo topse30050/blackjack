@@ -3,7 +3,6 @@ package jp.topse.swdev.bigdata.blackjack.demo;
 import jp.topse.swdev.bigdata.blackjack.DecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Deck;
 import jp.topse.swdev.bigdata.blackjack.Game;
-import jp.topse.swdev.bigdata.blackjack.KusanagiDecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
 import jp.topse.swdev.bigdata.blackjack.*;
@@ -15,11 +14,11 @@ public class Demo {
 
     public static void main(String[] args) {
     	Player[] players = new Player[] {
-				new Player("Aice",new KusanagiDecisionMaker()), 
-				new Player("Bob",new KusanagiDecisionMaker()), 
-				new Player("Charlie",new KusanagiDecisionMaker()),
-				new Player("Dave",new KusanagiDecisionMaker()), 
-				new Player("Ellen",new KusanagiDecisionMaker()), 
+				new Player("Aice"),
+				new Player("Bob"),
+				new Player("Charlie"),
+				new Player("Dave"),
+				new Player("Ellen"),
 				new Player("Frank")
 		};
 		Demo demo = new Demo(players);
