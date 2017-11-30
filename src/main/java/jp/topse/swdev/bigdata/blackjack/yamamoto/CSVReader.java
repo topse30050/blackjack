@@ -36,12 +36,9 @@ public class CSVReader {
 		}
 	}
 
-	//public static final String CSV_LABEL = "No,visibleSmall,visibleLarge,total,dealer,took,result";
-
-	//TODO
-	public static final String CSV_LABEL2 = "No,first,second,numOfAce,total,dealer,took,result";
-	public static final String CSV_LABEL3 = "No,first,second,third,numOfAce,total,dealer,took,result";
-	public static final String CSV_LABEL4 = "No,first,second,third,fourth,numOfAce,total,dealer,took,result";
+	public static final String CSV_LABEL2 = "first,second,numOfAce,total,dealer,took,result";
+	public static final String CSV_LABEL3 = "first,second,third,numOfAce,total,dealer,took,result";
+	public static final String CSV_LABEL4 = "first,second,third,fourth,numOfAce,total,dealer,took,result";
 
 	public static int getNumOfAce(int[] numArray) {
 		int value = 0;
@@ -63,27 +60,29 @@ public class CSVReader {
 		}
 
 		while(value > 21 && a[num-1] == 11) {
+			value = 0;
 			int[] b = a;
 			a = new int[num];
 			a[0] = 1;
+			value = a[0];
 			for(int i=0;i<num-1;i++) {
-				b[i+1] = a[i];
+				a[i+1] = b[i];
+				value+=a[i+1];
 			}
-			a = b;
 		}
+		Arrays.sort(a);
 		return a;
 	}
 
 	public void writeCSV(String path) {
 		// 2枚目の判断用
 		String path2=path+"-2.csv";
-		int counter = 1;
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path2)))){
 			String line = CSV_LABEL2;
 			bw.write(line+"\r\n");
 			for(Person p : players) {
 				int[] numArray = getNumArray(p.getNumbers(), 2);
-				StringBuilder sb = new StringBuilder(counter+",");
+				StringBuilder sb = new StringBuilder();
 				sb.append(numArray[0]).append(",")
 				.append(numArray[1]).append(",")
 				.append(getNumOfAce(numArray)).append(",")
@@ -91,9 +90,7 @@ public class CSVReader {
 				.append(p.getDealer().getFirstValue()).append(",")
 				.append(p.tookCard(2)).append(",")
 				.append(p.getResult());
-				//System.out.println(sb.toString());
 				bw.write(sb.toString()+"\r\n");
-				counter ++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,14 +98,13 @@ public class CSVReader {
 
 		// 3枚目の判断用
 		String path3=path+"-3.csv";
-		int counter3 = 1;
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path3)))){
 			String line = CSV_LABEL3;
 			bw.write(line+"\r\n");
 			for(Person p : players) {
 				int[] numArray = getNumArray(p.getNumbers(), 3);
 				if(numArray[0] == 0) continue;
-				StringBuilder sb = new StringBuilder(counter3+",");
+				StringBuilder sb = new StringBuilder();
 				sb.append(numArray[0]).append(",")
 				.append(numArray[1]).append(",")
 				.append(numArray[2]).append(",")
@@ -117,9 +113,7 @@ public class CSVReader {
 				.append(p.getDealer().getFirstValue()).append(",")
 				.append(p.tookCard(3)).append(",")
 				.append(p.getResult());
-				//System.out.println(sb.toString());
 				bw.write(sb.toString()+"\r\n");
-				counter3 ++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -127,14 +121,13 @@ public class CSVReader {
 
 		// 4枚目の判断用
 		String path4=path+"-4.csv";
-		int counter4 = 1;
 		try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path4)))){
 			String line = CSV_LABEL4;
 			bw.write(line+"\r\n");
 			for(Person p : players) {
 				int[] numArray = getNumArray(p.getNumbers(), 4);
 				if(numArray[0] == 0) continue;
-				StringBuilder sb = new StringBuilder(counter4+",");
+				StringBuilder sb = new StringBuilder();
 				sb.append(numArray[0]).append(",")
 				.append(numArray[1]).append(",")
 				.append(numArray[2]).append(",")
@@ -144,22 +137,12 @@ public class CSVReader {
 				.append(p.getDealer().getFirstValue()).append(",")
 				.append(p.tookCard(4)).append(",")
 				.append(p.getResult());
-				//System.out.println(sb.toString());
 				bw.write(sb.toString()+"\r\n");
-				counter4 ++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	/*
-	public void calc() {
-		for(int i=0;i<players.size();i++) {
-			Person p = players.get(i);
-			Statistics s = Statistics.getMyNumMapInstance(p.twoTotal()+"");
-			s.add(p);
-		}
-	}*/
 
 	public void calcDealerNum() {
 		for(int i=0;i<dealers.size();i++) {
@@ -169,19 +152,4 @@ public class CSVReader {
 			s.addForDealer(p);
 		}
 	}
-
-
-
-	/*
-	public static void main(String[] args) {
-		CSVReader reader = new CSVReader();
-		reader.read(new File("H:¥¥work¥¥bigdata¥¥demo.csv"));
-		reader.calc();
-		Statistics.print();
-		System.out.println("--");
-		reader.calcDealerNum();
-		Statistics.printDealer();
-		System.out.println("--");
-		reader.writeCSV("H:¥¥work¥¥bigdata¥¥model.csv");
-	}*/
 }
