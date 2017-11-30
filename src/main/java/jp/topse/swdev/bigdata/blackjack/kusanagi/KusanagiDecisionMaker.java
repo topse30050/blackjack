@@ -13,6 +13,7 @@ public class KusanagiDecisionMaker implements DecisionMaker {
     private Integer threshold_value;
     private int deck_type;
     public KusanagiDecisionMaker(int index, int value) {
+        deck_type = index;
         threshold_value = value;
         try {
             prediction = new GamePrediction(index);
@@ -21,17 +22,10 @@ public class KusanagiDecisionMaker implements DecisionMaker {
         }
 
     }
+
     public KusanagiDecisionMaker(int index) {
-    	deck_type = index;
-        threshold_value = 18;
-        try {
-            prediction = new GamePrediction(index);
-        } catch (Exception e){
-            System.out.println(e);
-        }
-
+        this(index, 18);
     }
-
 
     private int predictionGame(int stand_hit, Player player, Game game){
         Map<Player, Hand> playerHands = game.getPlayerHands();
