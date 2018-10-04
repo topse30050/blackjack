@@ -1,12 +1,5 @@
 package jp.topse.swdev.bigdata.blackjack;
 
-import jp.topse.swdev.bigdata.blackjack.hyogo.HyogoDecisionMaker;
-import jp.topse.swdev.bigdata.blackjack.ishitobi.IshitobiDecisionMaker;
-import jp.topse.swdev.bigdata.blackjack.kusanagi.KusanagiDecisionMaker;
-import jp.topse.swdev.bigdata.blackjack.sanada.DecisionMakerAvr;
-import jp.topse.swdev.bigdata.blackjack.yamamoto.MyDecisionMaker;
-import jp.topse.swdev.bigdata.blackjack.yoshimura.yoshi_DecisionMaker;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +27,12 @@ public class Competition {
 
             Deck deck = Deck.createTestDeck(index);
             Player[] players = new Player[]{
-                    new Player("Hyogo", new HyogoDecisionMaker(index)),
-                    new Player("Ishitobi", new IshitobiDecisionMaker(index)),
-                    new Player("Kusanagi", new KusanagiDecisionMaker(index)),
-                    new Player("Sanada", new DecisionMakerAvr(index)),
-                    new Player("Yamamoto", new MyDecisionMaker(index)),
-                    new Player("Yoshimura", new yoshi_DecisionMaker(index)),
+                new Player("Aice"), 
+                new Player("Bob"), 
+                new Player("Charlie"),
+                new Player("Dave"), 
+                new Player("Ellen"), 
+                new Player("Frank")
             };
             Map<Player, Integer> pointsMap = eval(players, deck, logger);
             showResult("Game " + index, pointsMap);
