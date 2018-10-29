@@ -19,4 +19,5 @@ dependencies {
 
     // https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
     compile group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.6.12'
+    compile group: 'nz.ac.waikato.cms.weka', name: 'LibSVM', version: '1.0.10'
 }

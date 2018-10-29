@@ -7,23 +7,26 @@ import jp.topse.swdev.bigdata.blackjack.Player;
 
 public class Topse30050AI implements DecisionMaker {
 
-	/**
-	 * ���̂Ƃ��둦�X�^���h�B
-	 */
-	@Override
-	public Action decide(Player player, Game game) {
-		Action decidedAction = Action.STAND;
+    /**
+     * 今のところ即スタンド。
+     * 目標ゲーム方針は下記の通り。<br/>
+     * 学習結果モデルにディーラーのアップカード、自身のプレイ順序、ゲーム開始時に初期配布された2枚、現在の手持ち枚数に1枚足したものを入力し、
+     * 得られた結果が勝ち、引き分けであればHIT、負けであればSTANDをアクションとして返す。
+     */
+    @Override
+    public Action decide(Player player, Game game) {
+        Action decidedAction = Action.STAND;
 
-		System.out.println();
-		System.out.println("�f�B�[���[�̃A�b�v�J�[�h:" + game.getUpCard().getValue());
-		System.out.println(player.getName() + ":" + game.getPlayerHands().get(player).eval());
-		System.out.println();
+        System.out.println();
+        System.out.println("ディーラーのアップカード:" + game.getUpCard().getValue());
+        System.out.println(player.getName() + ":" + game.getPlayerHands().get(player).eval());
+        System.out.println();
 
-		if (game.getPlayerHands().get(player).eval() < 17) {
-			decidedAction = Action.HIT;
-		}
+        if (game.getPlayerHands().get(player).eval() < 17) {
+            decidedAction = Action.HIT;
+        }
 
-		return decidedAction;
-	}
+        return decidedAction;
+    }
 
 }
