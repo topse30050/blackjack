@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import jp.topse.swdev.bigdata.blackjack.Card;
@@ -15,7 +12,7 @@ import jp.topse.swdev.bigdata.blackjack.Result;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.LibSVM;
+import weka.classifiers.functions.*;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.*;
@@ -25,6 +22,7 @@ public class MakerForWekaModel {
     private static final String TRAIN_DATA = "data/training-data.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
+    private static final String CLASSIFIER_MODEL = "data/topse30050.model";
 
     private MakerForWekaModel() {
     }
@@ -63,7 +61,8 @@ public class MakerForWekaModel {
 //        }
     }
 
-    public static void main(String[] args) {
+
+    private static void makeClassifierModel() {
         List<DataModel> data= new ArrayList<>();
         try (Stream<String> line = Files.lines(Paths.get(TRAIN_DATA))) {
             line.map(str -> str.split(",")).forEach(elements -> {
@@ -85,43 +84,48 @@ public class MakerForWekaModel {
 //        writeArff(trainArff, TRAIN_ARFF);
 //        writeArff(evalArff, EVAL_ARFF);
 
-        System.out.println("***** NaiveBayes *****");
-        Classifier c = analyzeByNaiveBayes(trainArff);
-        evalResult(c, evalArff);
-        System.out.println();
 
-        System.out.println("***** J48 *****");
-        Classifier c2 = analyzeByJ48(trainArff);
-        evalResult(c2, evalArff);
-        System.out.println();
+//        System.out.println("***** NaiveBayes *****");
+//        Classifier c = getBuiltClassifier(trainArff, new NaiveBayes());
+//        evalResult(c, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** J48 *****");
+//        Classifier c2 =getBuiltClassifier(trainArff, new J48(), "-U");
+//        evalResult(c2, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** RandomForest *****");
+//        Classifier c3 = getBuiltClassifier(trainArff, new RandomForest());
+//        evalResult(c3, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** Logistic *****");
+//        Classifier c4 = getBuiltClassifier(trainArff, new Logistic());
+//        evalResult(c4, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** SMO *****");
+//        Classifier c5 = getBuiltClassifier(trainArff, new SMO());
+//        evalResult(c5, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** Multilayer Perceptron *****");
+//        Classifier c6 = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
+//        evalResult(c6, evalArff);
+//        System.out.println();
 
-        System.out.println("***** RandomForest *****");
-        Classifier c3 = analyzeByRandomForest(trainArff);
-        evalResult(c3, evalArff);
-        System.out.println();
-
-        Classifier c4 = analyzeBySVM(trainArff);
         System.out.println("***** SVM *****");
-        evalResult(c4, evalArff);
+        Classifier c7 = getBuiltClassifier(trainArff, new LibSVM());
+        evalResult(c7, evalArff);
         System.out.println();
 
 
-
-
         try {
-            SerializationHelper.write("data/topse30050.model", c4);
+            SerializationHelper.write(CLASSIFIER_MODEL, c7);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            Classifier preModel = (Classifier) SerializationHelper.read("data/topse30050.model");
-            System.out.println("***** Load Model *****");
-            evalResult(preModel, evalArff);
-            System.out.println();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     private static int getCardCountFromCsvString(String... hands) {
@@ -170,59 +174,59 @@ public class MakerForWekaModel {
         }
     }
 
-    private static Classifier analyzeByNaiveBayes(Instances arff) {
-        NaiveBayes nb = new NaiveBayes();
-        try {
-            nb.buildClassifier(arff);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return nb;
-    }
 
-    private static Classifier analyzeByJ48(Instances arff) {
-        J48 tree = new J48();
+    private static Classifier getBuiltClassifier(Instances arff, Classifier classifier, String... options) {
         try {
-            String[] options = new String[1];
-            options[0] = "-U";
-            tree.setOptions(options);
-            tree.buildClassifier(arff);
+            if (options != null) {
+                classifier.setOptions(options);
+            }
+            classifier.buildClassifier(arff);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return tree;
+        return classifier;
     }
 
-    private static Classifier analyzeByRandomForest(Instances arff) {
-        RandomForest rf = new RandomForest();
-        try {
-            rf.buildClassifier(arff);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return rf;
-    }
-
-    private static Classifier analyzeBySVM(Instances arff) {
-        LibSVM svm = new LibSVM();
-        try {
-            svm.buildClassifier(arff);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return svm;
-    }
 
     private static void evalResult(Classifier c, Instances arff) {
         try {
             Evaluation eval = new Evaluation(arff);
             eval.evaluateModel(c, arff);
             System.out.println(eval.toSummaryString());
+            System.out.println(eval.toMatrixString());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static Result.Type getPredictedResult(int dealerUpCard, int playOrder, int hand1, int hand2, int cardsCount) {
+        if (!new File(CLASSIFIER_MODEL).exists()) {
+            makeClassifierModel();
+        }
+
+        //TODO 今はお試し中
+        try {
+            Classifier preModel = (Classifier) SerializationHelper.read("data/topse30050.model");
+//            System.out.println("***** Load Model *****");
+//            evalResult(preModel, evalArff);
+//            System.out.println();
+            List<DataModel> predictData = new ArrayList<>();
+            predictData.add(new DataModel(10, 1, 8, 3, 3, Result.Type.WIN));
+            Instances predictArff = data2arff(predictData);
+            System.out.println(new Evaluation(predictArff).evaluateModelOnce(preModel, predictArff.firstInstance()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;//TODO evaluateModelOnceで得られたdoubleから該当の結果を返す
+    }
+
+
+
+    public static void main(String[] args) {
+//        makeClassifierModel();
+        Result.Type result = MakerForWekaModel.getPredictedResult(10, 1, 8, 3, 3);
     }
 }
