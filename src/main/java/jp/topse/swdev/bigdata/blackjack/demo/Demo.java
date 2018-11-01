@@ -7,6 +7,8 @@ import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
 import jp.topse.swdev.bigdata.blackjack.*;
 
+import main.java.jp.topse.swdev.bigdata.blackjack.topse30015.*;
+
 /**
  * Created by doi on 2017/09/28.
  */
@@ -16,10 +18,8 @@ public class Demo {
     	Player[] players = new Player[] {
 				new Player("Aice"),
 				new Player("Bob"),
-				new Player("Charlie"),
-				new Player("Dave"),
-				new Player("Ellen"),
-				new Player("Frank")
+                new Player("Charlie"),
+                new Player("Ohta", new Topse30015())
 		};
 		Demo demo = new Demo(players);
 		demo.eval();
