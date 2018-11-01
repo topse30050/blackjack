@@ -44,21 +44,21 @@ public class Topse30050AI implements DecisionMaker {
 //        Result.Type predictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.getCount() + 1);
 //        return  (predictedResult == null || predictedResult.equals(Result.Type.LOSE)) ? Action.STAND : Action.HIT;
 
-        Result.Type nowPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), ((myHand.getCount() == 2) ? 0 : (myHand.eval() - myHand.get(myHand.getCount() - 1).getValue())), myHand.getCount());
-        Result.Type nextPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.eval(), myHand.getCount() + 1);
-        if (nowPredictedResult == null || nextPredictedResult == null) {
-            return Action.STAND;
-        } else if (nowPredictedResult.equals(Result.Type.LOSE)) {
-            // 今のままでは負けなら引く
-            return Action.HIT;
-        } else if (nowPredictedResult.equals(Result.Type.DRAW) && nextPredictedResult.equals(Result.Type.WIN)) {
-            // 今のままは引き分け、引けば勝ちの予想なら攻めて引く
-            return Action.HIT;
-        } else {
-            return Action.STAND;
-        }
+//        Result.Type nowPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), ((myHand.getCount() == 2) ? 0 : (myHand.eval() - myHand.get(myHand.getCount() - 1).getValue())), myHand.getCount());
+//        Result.Type nextPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.eval(), myHand.getCount() + 1);
+//        if (nowPredictedResult == null || nextPredictedResult == null) {
+//            return Action.STAND;
+//        } else if (nowPredictedResult.equals(Result.Type.LOSE)) {
+//            // 今のままでは負けなら引く
+//            return Action.HIT;
+//        } else if (nowPredictedResult.equals(Result.Type.DRAW) && nextPredictedResult.equals(Result.Type.WIN)) {
+//            // 今のままは引き分け、引けば勝ちの予想なら攻めて引く
+//            return Action.HIT;
+//        } else {
+//            return Action.STAND;
+//        }
 
-//        return (game.getPlayerHands().get(player).eval() < 17) ? Action.HIT : Action.STAND;
+        return (game.getPlayerHands().get(player).eval() < 17) ? Action.HIT : Action.STAND;
     }
 
 }

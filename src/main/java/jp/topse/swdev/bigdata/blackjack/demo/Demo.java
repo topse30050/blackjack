@@ -30,6 +30,7 @@ public class Demo {
     			new Player("No.3"),
     			new Player("No.4"),
 */
+
                 new Player("No.1"),
                 new Player("No.2"),
                 new Player("AI", new Topse30050AI()),
@@ -45,7 +46,7 @@ public class Demo {
     }
 
     private void eval() {
-    	for (int i = 0; i < 8000;++i) {
+    	for (int i = 0; i < 5;++i) {
     		doOneGame(players);
     	}
     }

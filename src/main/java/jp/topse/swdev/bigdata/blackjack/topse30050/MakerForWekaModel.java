@@ -23,7 +23,7 @@ public class MakerForWekaModel {
     private static final String TRAIN_DATA = "data/training-deck3.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
-    private static final String CLASSIFIER_MODEL = "data/topse30050.model";
+    private static final String CLASSIFIER_MODEL = "models/topse30050.model";
 
     private static final Result.Type[] CLASS_VALUES = new Result.Type[]{Result.Type.WIN, Result.Type.DRAW, Result.Type.LOSE};
     private static Classifier aiModel;
@@ -103,40 +103,40 @@ public class MakerForWekaModel {
 //        writeArff(evalArff, EVAL_ARFF);
 
 
-        System.out.println("***** NaiveBayes *****");
-        Classifier c1 = getBuiltClassifier(trainArff, new NaiveBayes());
-        evalResult(c1, evalArff);
-        System.out.println();
+//        System.out.println("***** NaiveBayes *****");
+//        Classifier c1 = getBuiltClassifier(trainArff, new NaiveBayes());
+//        evalResult(c1, evalArff);
+//        System.out.println();
 
         System.out.println("***** J48 *****");
         Classifier c2 =getBuiltClassifier(trainArff, new J48(), "-U");
         evalResult(c2, evalArff);
         System.out.println();
 
-        System.out.println("***** RandomForest *****");
-        Classifier c3 = getBuiltClassifier(trainArff, new RandomForest());
-        evalResult(c3, evalArff);
-        System.out.println();
-
-        System.out.println("***** Logistic *****");
-        Classifier c4 = getBuiltClassifier(trainArff, new Logistic());
-        evalResult(c4, evalArff);
-        System.out.println();
-
-        System.out.println("***** SMO *****");
-        Classifier c5 = getBuiltClassifier(trainArff, new SMO());
-        evalResult(c5, evalArff);
-        System.out.println();
-
-        System.out.println("***** Multilayer Perceptron *****");
-        Classifier c6 = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
-        evalResult(c6, evalArff);
-        System.out.println();
-
-        System.out.println("***** SVM *****");
-        Classifier c7 = getBuiltClassifier(trainArff, new LibSVM());
-        evalResult(c7, evalArff);
-        System.out.println();
+//        System.out.println("***** RandomForest *****");
+//        Classifier c3 = getBuiltClassifier(trainArff, new RandomForest());
+//        evalResult(c3, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** Logistic *****");
+//        Classifier c4 = getBuiltClassifier(trainArff, new Logistic());
+//        evalResult(c4, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** SMO *****");
+//        Classifier c5 = getBuiltClassifier(trainArff, new SMO());
+//        evalResult(c5, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** Multilayer Perceptron *****");
+//        Classifier c6 = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
+//        evalResult(c6, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** SVM *****");
+//        Classifier c7 = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(c7, evalArff);
+//        System.out.println();
 
 
         aiModel = c2;
@@ -253,7 +253,7 @@ public class MakerForWekaModel {
         int predictedValue = Integer.MAX_VALUE;
         try {
             if (aiModel == null) {
-                aiModel = (Classifier) SerializationHelper.read("data/topse30050.model");
+                aiModel = (Classifier) SerializationHelper.read(CLASSIFIER_MODEL);
             }
 //            System.out.println("***** Load Model *****");
 //            evalResult(preModel, evalArff);
