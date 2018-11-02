@@ -7,21 +7,22 @@ public class Topse30050AI implements DecisionMaker {
     /**
      * ゲーム方針は下記の通り。<br/>
      * 学習結果モデルに
-     * <ul>
-     * <li>ディーラーのアップカード、自身のプレイ順序、ゲーム開始時に初期配布された2枚、現在の前の合計点、現在の手持ち枚数</li>
-     * <li>ディーラーのアップカード、自身のプレイ順序、ゲーム開始時に初期配布された2枚、現在の合計点、現在の手持ち枚数に1枚足したもの</li>
-     * </ul>
-     * を入力し得られた結果に応じてHITかSTANDを選択する。
+     *
+     * を入力し
+     *
+     * する。
      */
     @Override
     public Action decide(Player player, Game game) {
 
-        // TODO ゲーム中に取得できる項目を模索中(もしかして自身のプレイ順序は取ってこれない？)
         Hand myHand = game.getPlayerHands().get(player);
+        int nowTotal = myHand.eval();
+        int nowCardCount = myHand.getCount();
+
 //        System.out.println();
-//        System.out.println("ディーラーのアップカード:" + game.getUpCard().getValue());
-//        System.out.println(player.getName() + "の今の手持ち合計:" + myHand.eval());
-//        System.out.println(player.getName() + "の今の手持ち枚数:" + myHand.getCount());
+//        System.out.println("ディーラーのアップカード:" + game.getUpCard());
+//        System.out.println(player.getName() + "の今の手持ち合計:" + nowTotal);
+//        System.out.println(player.getName() + "の今の手持ち枚数:" + nowCardCount);
 //        String separator = "";
 //        for (int i = 0; i < myHand.getCount(); i++) {
 //            System.out.print(separator + myHand.get(i));
@@ -40,25 +41,35 @@ public class Topse30050AI implements DecisionMaker {
 //            System.out.println();
 //        });
 
-//        Result.Type predictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), 3, myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.getCount() + 1);
-//        Result.Type predictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.getCount() + 1);
-//        return  (predictedResult == null || predictedResult.equals(Result.Type.LOSE)) ? Action.STAND : Action.HIT;
+        if (nowCardCount > 5) {
+            return (nowTotal < 17) ? Action.HIT : Action.STAND;
+        }
 
-//        Result.Type nowPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), ((myHand.getCount() == 2) ? 0 : (myHand.eval() - myHand.get(myHand.getCount() - 1).getValue())), myHand.getCount());
-//        Result.Type nextPredictedResult = MakerForWekaModel.getPredictedResult(game.getUpCard().getValue(), myHand.get(0).getValue(), myHand.get(1).getValue(), myHand.eval(), myHand.getCount() + 1);
-//        if (nowPredictedResult == null || nextPredictedResult == null) {
-//            return Action.STAND;
-//        } else if (nowPredictedResult.equals(Result.Type.LOSE)) {
-//            // 今のままでは負けなら引く
-//            return Action.HIT;
-//        } else if (nowPredictedResult.equals(Result.Type.DRAW) && nextPredictedResult.equals(Result.Type.WIN)) {
-//            // 今のままは引き分け、引けば勝ちの予想なら攻めて引く
-//            return Action.HIT;
-//        } else {
-//            return Action.STAND;
-//        }
+        int[] cardIndexes = new int[5];
+        for (int i = 0; i < nowCardCount; i++) {
+            cardIndexes[i] = myHand.get(i).getIndex();
+        }
+        for (int i = nowCardCount; i < cardIndexes.length; i++) {
+            cardIndexes[i] = 0;
+        }
+        Result.Type predictedResult = Topse30050Model.getPredictedResult(
+                game.getUpCard().getIndex(),
+                cardIndexes[0],
+                cardIndexes[1],
+                cardIndexes[2],
+                cardIndexes[3],
+                cardIndexes[4]);
+//System.out.println("今の状態での勝敗予想:" + predictedResult);
+//System.out.println(((predictedResult == null || predictedResult.equals(Result.Type.WIN)) ? Action.STAND : Action.HIT).toString() + "する");
+        if (predictedResult == null) {
+            return Action.STAND;
+        } else if (predictedResult.equals(Result.Type.LOSE) || nowTotal < 12) {
+            return Action.HIT;
+        } else {
+            return Action.STAND;
+        }
 
-        return (game.getPlayerHands().get(player).eval() < 17) ? Action.HIT : Action.STAND;
+//        return (game.getPlayerHands().get(player).eval() < 17) ? Action.HIT : Action.STAND;
     }
 
 }

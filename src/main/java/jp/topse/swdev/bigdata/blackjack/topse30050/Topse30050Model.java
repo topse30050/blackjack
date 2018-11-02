@@ -1,14 +1,9 @@
 package jp.topse.swdev.bigdata.blackjack.topse30050;
 
 import jp.topse.swdev.bigdata.blackjack.Card;
+import jp.topse.swdev.bigdata.blackjack.Result;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.LibSVM;
-import weka.classifiers.functions.Logistic;
-import weka.classifiers.functions.MultilayerPerceptron;
-import weka.classifiers.functions.SMO;
-import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
 import weka.core.*;
 
@@ -18,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Topse30050Model {
@@ -28,20 +22,10 @@ public class Topse30050Model {
 //    private static final String EVAL_ARFF = "data/eval.arff";
     private static final String CLASSIFIER_MODEL = "models/topse30050.model";
 
-    private static final Card[] CLASS_VALUES = new Card[]{
-            Card.ACE,
-            Card.TWO,
-            Card.THREE,
-            Card.FOUR,
-            Card.FIVE,
-            Card.SIX,
-            Card.SEVEN,
-            Card.EIGHT,
-            Card.NINE,
-            Card.TEN,
-//            Card.JACK,
-//            Card.QUEEN,
-//            Card.KING,
+    private static final Result.Type[] CLASS_VALUES = new Result.Type[]{
+            Result.Type.WIN,
+            Result.Type.DRAW,
+            Result.Type.LOSE,
     };
     private static Classifier aiModel;
 
@@ -55,18 +39,16 @@ public class Topse30050Model {
         private int hand3;          // HIT1枚目(引いてなければ0)
         private int hand4;          // HIT2枚目(引いてなければ0)
         private int hand5;          // HIT3枚目(引いてなければ0)
-        private int predictIndex;   // 予測したいカードの位置
-        private Card predictCard;    // 予測したいカードの実際の値
+        private Result.Type result; // 結果
 
-        public DataModel(int dealerUpCard, int hand1, int hand2, int hand3, int hand4, int hand5, int predictIndex, Card predictCard) {
+        DataModel(int dealerUpCard, int hand1, int hand2, int hand3, int hand4, int hand5, Result.Type result) {
             this.dealerUpCard = dealerUpCard;
             this.hand1 = hand1;
             this.hand2 = hand2;
             this.hand3 = hand3;
             this.hand4 = hand4;
             this.hand5 = hand5;
-            this.predictIndex = predictIndex;
-            this.predictCard = predictCard;
+            this.result = result;
         }
     }
 
@@ -80,41 +62,18 @@ public class Topse30050Model {
                 Card[] p3Hands = {Card.valueOf(elements[21]), Card.valueOf(elements[22]), (elements[23].length() == 0) ? null : Card.valueOf(elements[23]), (elements[24].length() == 0) ? null : Card.valueOf(elements[24]), (elements[25].length() == 0) ? null : Card.valueOf(elements[25])};
                 Card[] p4Hands = {Card.valueOf(elements[28]), Card.valueOf(elements[29]), (elements[30].length() == 0) ? null : Card.valueOf(elements[30]), (elements[31].length() == 0) ? null : Card.valueOf(elements[31]), (elements[32].length() == 0) ? null : Card.valueOf(elements[32])};
 
-                data.add(new DataModel(dealerHands[0].getValue(), p1Hands[0].getValue(), p1Hands[1].getValue(), (p1Hands[2] == null) ? 0 : p1Hands[2].getValue(), (p1Hands[3] == null) ? 0 : p1Hands[3].getValue(), (p1Hands[4] == null) ? 0 : p1Hands[4].getValue(), 3, p1Hands[2]));
-                data.add(new DataModel(dealerHands[0].getValue(), p1Hands[0].getValue(), p1Hands[1].getValue(), (p1Hands[2] == null) ? 0 : p1Hands[2].getValue(), (p1Hands[3] == null) ? 0 : p1Hands[3].getValue(), (p1Hands[4] == null) ? 0 : p1Hands[4].getValue(), 4, p1Hands[3]));
-                data.add(new DataModel(dealerHands[0].getValue(), p1Hands[0].getValue(), p1Hands[1].getValue(), (p1Hands[2] == null) ? 0 : p1Hands[2].getValue(), (p1Hands[3] == null) ? 0 : p1Hands[3].getValue(), (p1Hands[4] == null) ? 0 : p1Hands[4].getValue(), 5, p1Hands[4]));
-
-                data.add(new DataModel(dealerHands[0].getValue(), p2Hands[0].getValue(), p2Hands[1].getValue(), (p2Hands[2] == null) ? 0 : p2Hands[2].getValue(), (p2Hands[3] == null) ? 0 : p2Hands[3].getValue(), (p2Hands[4] == null) ? 0 : p2Hands[4].getValue(), 3, p2Hands[2]));
-                data.add(new DataModel(dealerHands[0].getValue(), p2Hands[0].getValue(), p2Hands[1].getValue(), (p2Hands[2] == null) ? 0 : p2Hands[2].getValue(), (p2Hands[3] == null) ? 0 : p2Hands[3].getValue(), (p2Hands[4] == null) ? 0 : p2Hands[4].getValue(), 4, p2Hands[3]));
-                data.add(new DataModel(dealerHands[0].getValue(), p2Hands[0].getValue(), p2Hands[1].getValue(), (p2Hands[2] == null) ? 0 : p2Hands[2].getValue(), (p2Hands[3] == null) ? 0 : p2Hands[3].getValue(), (p2Hands[4] == null) ? 0 : p2Hands[4].getValue(), 5, p2Hands[4]));
-
-                data.add(new DataModel(dealerHands[0].getValue(), p3Hands[0].getValue(), p3Hands[1].getValue(), (p3Hands[2] == null) ? 0 : p3Hands[2].getValue(), (p3Hands[3] == null) ? 0 : p3Hands[3].getValue(), (p3Hands[4] == null) ? 0 : p3Hands[4].getValue(), 3, p3Hands[2]));
-                data.add(new DataModel(dealerHands[0].getValue(), p3Hands[0].getValue(), p3Hands[1].getValue(), (p3Hands[2] == null) ? 0 : p3Hands[2].getValue(), (p3Hands[3] == null) ? 0 : p3Hands[3].getValue(), (p3Hands[4] == null) ? 0 : p3Hands[4].getValue(), 4, p3Hands[3]));
-                data.add(new DataModel(dealerHands[0].getValue(), p3Hands[0].getValue(), p3Hands[1].getValue(), (p3Hands[2] == null) ? 0 : p3Hands[2].getValue(), (p3Hands[3] == null) ? 0 : p3Hands[3].getValue(), (p3Hands[4] == null) ? 0 : p3Hands[4].getValue(), 5, p3Hands[4]));
-
-                data.add(new DataModel(dealerHands[0].getValue(), p4Hands[0].getValue(), p4Hands[1].getValue(), (p4Hands[2] == null) ? 0 : p4Hands[2].getValue(), (p4Hands[3] == null) ? 0 : p4Hands[3].getValue(), (p4Hands[4] == null) ? 0 : p4Hands[4].getValue(), 3, p4Hands[2]));
-                data.add(new DataModel(dealerHands[0].getValue(), p4Hands[0].getValue(), p4Hands[1].getValue(), (p4Hands[2] == null) ? 0 : p4Hands[2].getValue(), (p4Hands[3] == null) ? 0 : p4Hands[3].getValue(), (p4Hands[4] == null) ? 0 : p4Hands[4].getValue(), 4, p4Hands[3]));
-                data.add(new DataModel(dealerHands[0].getValue(), p4Hands[0].getValue(), p4Hands[1].getValue(), (p4Hands[2] == null) ? 0 : p4Hands[2].getValue(), (p4Hands[3] == null) ? 0 : p4Hands[3].getValue(), (p4Hands[4] == null) ? 0 : p4Hands[4].getValue(), 5, p4Hands[4]));
-
+                data.add(new DataModel(dealerHands[0].getIndex(), p1Hands[0].getIndex(), p1Hands[1].getIndex(), (p1Hands[2] == null) ? 0 : p1Hands[2].getIndex(), (p1Hands[3] == null) ? 0 : p1Hands[3].getIndex(), (p1Hands[4] == null) ? 0 : p1Hands[4].getIndex(), Result.Type.valueOf(elements[12])));
+                data.add(new DataModel(dealerHands[0].getIndex(), p2Hands[0].getIndex(), p2Hands[1].getIndex(), (p2Hands[2] == null) ? 0 : p2Hands[2].getIndex(), (p2Hands[3] == null) ? 0 : p2Hands[3].getIndex(), (p2Hands[4] == null) ? 0 : p2Hands[4].getIndex(), Result.Type.valueOf(elements[19])));
+                data.add(new DataModel(dealerHands[0].getIndex(), p3Hands[0].getIndex(), p3Hands[1].getIndex(), (p3Hands[2] == null) ? 0 : p3Hands[2].getIndex(), (p3Hands[3] == null) ? 0 : p3Hands[3].getIndex(), (p3Hands[4] == null) ? 0 : p3Hands[4].getIndex(), Result.Type.valueOf(elements[26])));
+                data.add(new DataModel(dealerHands[0].getIndex(), p4Hands[0].getIndex(), p4Hands[1].getIndex(), (p4Hands[2] == null) ? 0 : p4Hands[2].getIndex(), (p4Hands[3] == null) ? 0 : p4Hands[3].getIndex(), (p4Hands[4] == null) ? 0 : p4Hands[4].getIndex(), Result.Type.valueOf(elements[33])));
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // 予想したいカードは引かれてないパターンはデータとして除き絵札は10点なので10のカードに寄せる
-        List<DataModel> training = data.stream()
-                .filter(d -> d.predictCard != null)
-                .peek(d -> {
-                    if (d.predictCard.equals(Card.JACK) || d.predictCard.equals(Card.QUEEN) || d.predictCard.equals(Card.KING)) {
-                        d.predictCard = Card.TEN;
-                    }
-                })
-                .collect(Collectors.toList());
-
-        int trainRatio = (int) (training.size() * 0.7);
-        List<DataModel> trainData = training.subList(0, trainRatio);
-        List<DataModel> evalData = training.subList(trainRatio, training.size());
-System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング%d件:テスト%d件\n", data.size(), training.size(), trainData.size(), evalData.size());
+        int trainRatio = (int) (data.size() * 0.7);
+        List<DataModel> trainData = data.subList(0, trainRatio);
+        List<DataModel> evalData = data.subList(trainRatio, data.size());
 
         Instances trainArff = data2arff(trainData);
         Instances evalArff = data2arff(evalData);
@@ -122,42 +81,42 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
 //        writeArff(evalArff, EVAL_ARFF);
 
 //        System.out.println("***** NaiveBayes *****");
-//        Classifier c1 = getBuiltClassifier(trainArff, new NaiveBayes());
-//        evalResult(c1, evalArff);
+//        Classifier modelNb = getBuiltClassifier(trainArff, new NaiveBayes());
+//        evalResult(modelNb, evalArff);
+//        System.out.println();
+//
+//        System.out.println("***** J48 *****");
+//        Classifier modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
+//        evalResult(modelJ48, evalArff);
 //        System.out.println();
 
-        System.out.println("***** J48 *****");
-        Classifier c2 =getBuiltClassifier(trainArff, new J48(), "-U");
-        evalResult(c2, evalArff);
+        System.out.println("***** RandomForest *****");
+        Classifier modelRf = getBuiltClassifier(trainArff, new RandomForest());
+        evalResult(modelRf, evalArff);
         System.out.println();
 
-//        System.out.println("***** RandomForest *****");
-//        Classifier c3 = getBuiltClassifier(trainArff, new RandomForest());
-//        evalResult(c3, evalArff);
-//        System.out.println();
-
 //        System.out.println("***** Logistic *****");
-//        Classifier c4 = getBuiltClassifier(trainArff, new Logistic());
-//        evalResult(c4, evalArff);
+//        Classifier modelLogi = getBuiltClassifier(trainArff, new Logistic());
+//        evalResult(modelLogi, evalArff);
 //        System.out.println();
-
+//
 //        System.out.println("***** SMO *****");
-//        Classifier c5 = getBuiltClassifier(trainArff, new SMO());
-//        evalResult(c5, evalArff);
+//        Classifier modelSMO = getBuiltClassifier(trainArff, new SMO());
+//        evalResult(modelSMO, evalArff);
 //        System.out.println();
-
+//
 //        System.out.println("***** Multilayer Perceptron *****");
-//        Classifier c6 = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
-//        evalResult(c6, evalArff);
+//        Classifier modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
+//        evalResult(modelMP, evalArff);
 //        System.out.println();
-
+//
 //        System.out.println("***** SVM *****");
-//        Classifier c7 = getBuiltClassifier(trainArff, new LibSVM());
-//        evalResult(c7, evalArff);
+//        Classifier modelSVM = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(modelSVM, evalArff);
 //        System.out.println();
 
 
-        aiModel = c2;
+        aiModel = modelRf;
         try {
             SerializationHelper.write(CLASSIFIER_MODEL, aiModel);
         } catch (Exception e) {
@@ -168,7 +127,7 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
 
     private static Instances data2arff(List<DataModel> data) {
         FastVector classValues = new FastVector();
-        for (Card classValue : CLASS_VALUES) {
+        for (Result.Type classValue : CLASS_VALUES) {
             classValues.addElement(classValue.name());
         }
 
@@ -179,8 +138,7 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
         attributes.addElement(new Attribute("Hand 3"));
         attributes.addElement(new Attribute("Hand 4"));
         attributes.addElement(new Attribute("Hand 5"));
-        attributes.addElement(new Attribute("Predict Index"));
-        attributes.addElement(new Attribute("Predict Card", classValues));
+        attributes.addElement(new Attribute("Predict Result", classValues));
 
         Instances arff = new Instances("Data", attributes, 0);
         arff.setClassIndex(arff.numAttributes() - 1);
@@ -193,8 +151,7 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
             values[3] = d.hand3;
             values[4] = d.hand4;
             values[5] = d.hand5;
-            values[6] = d.predictIndex;
-            values[7] = arff.attribute(7).indexOfValue(d.predictCard.name());
+            values[6] = arff.attribute(6).indexOfValue(d.result.name());
             arff.add(new Instance(1.0, values));
         });
 
@@ -236,7 +193,7 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
             e.printStackTrace();
         }
     }
-    static Card getPredictedCard(int dealerUpCard, int hand1, int hand2, int hand3, int hand4, int hand5, int predictIndex) {
+    static Result.Type getPredictedResult(int dealerUpCard, int hand1, int hand2, int hand3, int hand4, int hand5) {
         if (!new File(CLASSIFIER_MODEL).exists()) {
             makeClassifierModel();
         }
@@ -247,7 +204,7 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
                 aiModel = (Classifier) SerializationHelper.read(CLASSIFIER_MODEL);
             }
             List<DataModel> predictData = new ArrayList<>();
-            predictData.add(new DataModel(dealerUpCard, hand1, hand2, hand3, hand4, hand5, predictIndex, Card.ACE)); // 結果の引数はダミー
+            predictData.add(new DataModel(dealerUpCard, hand1, hand2, hand3, hand4, hand5, Result.Type.WIN)); // 結果の引数はダミー
             Instances predictArff = data2arff(predictData);
             predictedValue = (int) new Evaluation(predictArff).evaluateModelOnce(aiModel, predictArff.firstInstance());
         } catch (Exception e) {
@@ -258,8 +215,8 @@ System.out.printf("全パターン%d件 -> 有効データ%d, トレーニング
 
 
     public static void main(String[] args) {
-//        makeClassifierModel();
-        Card nextCard = Topse30050Model.getPredictedCard(7, 1, 2, 0, 0, 0, 3);
-        System.out.println(nextCard);
+        makeClassifierModel();
+//        Card nextCard = Topse30050Model.getPredictedResult(7, 1, 2, 0, 0, 0, 3);
+//        System.out.println(nextCard);
     }
 }

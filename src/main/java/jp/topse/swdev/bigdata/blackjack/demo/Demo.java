@@ -46,7 +46,7 @@ public class Demo {
     }
 
     private void eval() {
-    	for (int i = 0; i < 5;++i) {
+    	for (int i = 0; i < 8000;++i) {
     		doOneGame(players);
     	}
     }
