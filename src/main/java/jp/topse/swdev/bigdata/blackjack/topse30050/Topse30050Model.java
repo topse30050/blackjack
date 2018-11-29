@@ -19,8 +19,8 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Topse30050Model {
-//    private static final String TRAIN_DATA = "data/training-data.csv";
-    private static final String TRAIN_DATA = "data/training-deck3.csv";
+    private static final String TRAIN_DATA = "data/training-data.csv";
+//    private static final String TRAIN_DATA = "data/training-deck3.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
     private static final String CLASSIFIER_MODEL_RESULT = "models/topse30050_result.model";
@@ -113,8 +113,8 @@ public class Topse30050Model {
         List<DataModelResult> trainData = dataResult.subList(0, trainRatio);
         List<DataModelResult> evalData = dataResult.subList(trainRatio, dataResult.size());
 
-        Instances trainArff = data2arff(trainData);
-        Instances evalArff = data2arff(evalData);
+        Instances trainArff = dataResult2arff(trainData);
+        Instances evalArff = dataResult2arff(evalData);
 //        writeArff(trainArff, TRAIN_ARFF);
 //        writeArff(evalArff, EVAL_ARFF);
 
@@ -215,7 +215,7 @@ public class Topse30050Model {
     }
 
 
-    private static Instances data2arff(List<DataModelResult> data) {
+    private static Instances dataResult2arff(List<DataModelResult> data) {
         FastVector classValues = new FastVector();
         for (Result.Type classValue : CLASS_VALUES_RESULT) {
             classValues.addElement(classValue.name());
@@ -326,7 +326,7 @@ public class Topse30050Model {
             }
             List<DataModelResult> predictData = new ArrayList<>();
             predictData.add(new DataModelResult(dealerUpCard, hand1, hand2, hand3, hand4, hand5, Result.Type.WIN)); // 結果の引数はダミー
-            Instances predictArff = data2arff(predictData);
+            Instances predictArff = dataResult2arff(predictData);
             predictedValue = (int) new Evaluation(predictArff).evaluateModelOnce(aiModelResult, predictArff.firstInstance());
         } catch (Exception e) {
             e.printStackTrace();
