@@ -1,13 +1,10 @@
 package jp.topse.swdev.bigdata.blackjack.demo;
 
-import jp.topse.swdev.bigdata.blackjack.DecisionMaker;
 import jp.topse.swdev.bigdata.blackjack.Deck;
 import jp.topse.swdev.bigdata.blackjack.Game;
 import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
-import jp.topse.swdev.bigdata.blackjack.*;
-
-import main.java.jp.topse.swdev.bigdata.blackjack.topse30015.*;
+import jp.topse.swdev.bigdata.blackjack.topse30015.Topse30015;
 
 /**
  * Created by doi on 2017/09/28.
@@ -35,7 +32,7 @@ public class Demo {
     		doOneGame(players);
     	}
     }
-    
+
 
     private void doOneGame(Player[] players) {
 //        Deck deck = Deck.createDefault();
@@ -48,7 +45,7 @@ public class Demo {
         for (Player player : players) {
             game.join(player);
       }
-        
+
         game.setup();
 
         game.start();

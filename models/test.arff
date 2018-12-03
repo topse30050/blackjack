@@ -1,4 +1,4 @@
-@RELATION iris
+@RELATION blackjack
 
 @ATTRIBUTE host NUMERIC
 @ATTRIBUTE player1 NUMERIC

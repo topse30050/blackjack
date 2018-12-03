@@ -1,16 +1,32 @@
-package main.java.jp.topse.swdev.bigdata.blackjack.topse30015;
+package jp.topse.swdev.bigdata.blackjack.topse30015;
 
-import java.util.*;
-import jp.topse.swdev.bigdata.blackjack.*;
+import java.util.Map;
 
-import weka.core.*;
+import jp.topse.swdev.bigdata.blackjack.Action;
+import jp.topse.swdev.bigdata.blackjack.DecisionMaker;
+import jp.topse.swdev.bigdata.blackjack.Game;
+import jp.topse.swdev.bigdata.blackjack.Hand;
+import jp.topse.swdev.bigdata.blackjack.Player;
 import weka.classifiers.Classifier;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
+import weka.core.converters.ConverterUtils.DataSource;
 
+@SuppressWarnings("deprecation")
 public class Topse30015 implements DecisionMaker {
+  private Instances dataset;
   private Classifier tree;
 
   public Topse30015() {
+    // 学習に使用したデータの読み込み、学習モデルの読み込み
     try {
+      DataSource source = new DataSource("models/test.arff");
+      dataset = source.getDataSet();
+      dataset.setClassIndex(dataset.numAttributes() - 1);
       tree = (Classifier)SerializationHelper.read("models/test.model");
     } catch (Exception e) {
       e.printStackTrace();
@@ -32,7 +48,7 @@ public class Topse30015 implements DecisionMaker {
     handClass.addElement("STAND");
     handClass.addElement("HIT");
     Attribute take = new Attribute("class", handClass);
-    
+
     instance.setValue(host, game.getUpCard().getValue());
     int i = 0;
     for (Map.Entry<Player, Hand> entry: playerHands.entrySet()) {
@@ -43,18 +59,19 @@ public class Topse30015 implements DecisionMaker {
       }
       ++i;
     }
+    instance.setDataset(dataset);
+    double ret = -1;
     try {
-      //System.out.println(instance);
-      double ret = tree.classifyInstance(instance);
-      System.out.println(ret);  
+      ret = tree.classifyInstance(instance);
+//      System.out.println(ret);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-//    if (hand.eval()< 17) {
-//        return Action.HIT;
-//    } else {
-        return Action.STAND;
-//    }
+    if (ret > 0) {
+      return Action.HIT;
+    } else {
+      return Action.STAND;
+    }
   }
 }
