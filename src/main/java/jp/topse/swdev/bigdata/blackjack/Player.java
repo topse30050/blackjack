@@ -31,7 +31,7 @@ public class Player {
     public Player(String name, DecisionMaker decisionMaker) {
         this.name = name;
         this.decisionMaker = decisionMaker;
-        System.out.println("Player " + name + " was created.");
+//        System.out.println("Player " + name + " was created.");
     }
 
     public String getName() {
