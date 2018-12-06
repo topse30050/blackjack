@@ -24,3 +24,6 @@ gradle compileJava
 ```
 java -cp build/classes/java/main jp.topse.swdev.bigdata.blackjack.demo.Demo
 ```
+
+## weka model generate
+java -cp weka.jar weka.classifiers.trees.J48 -t burst.arff -d burst.model

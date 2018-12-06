@@ -24,10 +24,10 @@ public class Topse30015 implements DecisionMaker {
   public Topse30015() {
     // 学習に使用したデータの読み込み、学習モデルの読み込み
     try {
-      DataSource source = new DataSource("models/test.arff");
+      DataSource source = new DataSource("models/topse30015.arff");
       dataset = source.getDataSet();
       dataset.setClassIndex(dataset.numAttributes() - 1);
-      tree = (Classifier)SerializationHelper.read("models/test.model");
+      tree = (Classifier)SerializationHelper.read("models/topse30015.model");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -35,35 +35,71 @@ public class Topse30015 implements DecisionMaker {
   @Override
   public Action decide(Player player, Game game) {
     Map<Player, Hand> playerHands = game.getPlayerHands();
+    Hand myHand = playerHands.get(player);
 
-    Instance instance = new DenseInstance(6);
-    Attribute host = new Attribute("host", 0);
-    Attribute[] players = new Attribute[5];
-    players[0] = new Attribute("player1", 1);
-    players[1] = new Attribute("player2", 2);
-    players[2] = new Attribute("player3", 3);
-    players[3] = new Attribute("player4-1", 4);
-    players[4] = new Attribute("player4-2", 5);
-    FastVector handClass = new FastVector(2);
-    handClass.addElement("STAND");
-    handClass.addElement("HIT");
-    Attribute take = new Attribute("class", handClass);
+    FastVector cardKind = new FastVector(14);
+    cardKind.addElement("ACE");
+    cardKind.addElement("TWO");
+    cardKind.addElement("THREE");
+    cardKind.addElement("FOUR");
+    cardKind.addElement("FIVE");
+    cardKind.addElement("SIX");
+    cardKind.addElement("SEVEN");
+    cardKind.addElement("EIGHT");
+    cardKind.addElement("NINE");
+    cardKind.addElement("TEN");
+    cardKind.addElement("JACK");
+    cardKind.addElement("QUEEN");
+    cardKind.addElement("KING");
+    cardKind.addElement("NONE");
 
-    instance.setValue(host, game.getUpCard().getValue());
+    FastVector result = new FastVector(2);
+    result.addElement("burst");
+    result.addElement("non-burst");
+
+    Instance instance = new DenseInstance(13);
+    Attribute dealer = new Attribute("dealer", cardKind, 0);
+    Attribute[] players = new Attribute[8];
+    players[0] = new Attribute("player1-1", cardKind, 1);
+    players[1] = new Attribute("player1-2", cardKind, 2);
+    players[2] = new Attribute("player2-1", cardKind, 3);
+    players[3] = new Attribute("player2-2", cardKind, 4);
+    players[4] = new Attribute("player3-1", cardKind, 5);
+    players[5] = new Attribute("player3-2", cardKind, 6);
+    players[6] = new Attribute("player4-1", cardKind, 7);
+    players[7] = new Attribute("player4-2", cardKind, 8);
+    Attribute[] addCards = new Attribute[2];
+    addCards[0] = new Attribute("card-1", cardKind, 9);
+    addCards[1] = new Attribute("card-2", cardKind, 10);
+    Attribute total = new Attribute("total", 11);
+    Attribute take = new Attribute("result", result, 12);
+
+    instance.setValue(dealer, game.getUpCard().toString());
     int i = 0;
     for (Map.Entry<Player, Hand> entry: playerHands.entrySet()) {
       Hand hand = entry.getValue();
-      instance.setValue(players[i], hand.get(0).getValue());
-      if (i == 3) {
-        instance.setValue(players[4], hand.get(1).getValue());
-      }
+      instance.setValue(players[i], hand.get(0).toString());
+      instance.setValue(players[i], hand.get(1).toString());
       ++i;
     }
+
+    String[] cards = new String[2];
+    cards[0] = "NONE";
+    cards[1] = "NONE";
+    for (int j = 2; j < myHand.getCount(); ++j) {
+    	if (j == 4) break;
+    	cards[j - 2] = myHand.get(j).toString();
+    }
+    for (int j = 0; j < 2; ++j) {
+    	instance.setValue(addCards[j], cards[j]);
+    }
+
+    instance.setValue(total, myHand.eval());
+
     instance.setDataset(dataset);
     double ret = -1;
     try {
       ret = tree.classifyInstance(instance);
-//      System.out.println(ret);
     } catch (Exception e) {
       e.printStackTrace();
     }

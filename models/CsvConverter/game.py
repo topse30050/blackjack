@@ -13,14 +13,13 @@ class Game:
 	def analyzeBurstData(self):
 		data = []
 		initialHands = ""
-		for card in self.__dealer.getInitialHand():
-			initialHands += card.getCard() + ","
+		initialHands += self.__dealer.getInitialHand()[0].getCard() + ","
 		for player in self.__players:
 			for card in player.getInitialHand():
 				initialHands += card.getCard() + ","
 		for player in self.__players:
 			cards = player.getAvailableHand()
-			addCards = ["NONE", "NONE", "NONE"]
+			addCards = ["NONE", "NONE"]
 			if (len(cards) <= 2):
 				continue
 			for i in range(2, len(cards)):
@@ -29,7 +28,8 @@ class Game:
 					hands.append(Card(cards[j]))
 				hand = PlayerHand(hands)
 				line = initialHands
-				addCards[i - 2] = cards[i - 1]
+				if (i > 2):
+					addCards[i - 3] = cards[i - 1]
 				for card in addCards:
 					line += card + ","
 				line += str(hand.score()) + ","

@@ -21,7 +21,7 @@ class PlayerHand:
 		return sum
 
 	def getInitialHand(self):
-		return [self.__hands[0]]
+		return [self.__hands[0], self.__hands[1]]
 
 	def getAvailableHand(self):
 		hands = []
