@@ -20,6 +20,7 @@ class Game:
 				initialHands += card.getCard() + ","
 		for player in self.__players:
 			cards = player.getAvailableHand()
+			addCards = ["NONE", "NONE", "NONE"]
 			if (len(cards) <= 2):
 				continue
 			for i in range(2, len(cards)):
@@ -27,7 +28,13 @@ class Game:
 				for j in range(i):
 					hands.append(Card(cards[j]))
 				hand = PlayerHand(hands)
-				line = initialHands + str(hand.score()) + ","
+				line = initialHands
+				addCards[i - 2] = cards[i - 1]
+				for card in addCards:
+					line += card + ","
+				line += str(hand.score()) + ","
+				hands.append(Card(cards[i]))
+
 				if (hand.isBurst()):
 					line += "burst"
 				else:
