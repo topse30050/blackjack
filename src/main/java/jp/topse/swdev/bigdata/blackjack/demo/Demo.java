@@ -5,6 +5,7 @@ import jp.topse.swdev.bigdata.blackjack.Deck;
 import jp.topse.swdev.bigdata.blackjack.Game;
 import jp.topse.swdev.bigdata.blackjack.Player;
 import jp.topse.swdev.bigdata.blackjack.Result;
+import jp.topse.swdev.bigdata.blackjack.topse30050.Topse30050AI;
 import jp.topse.swdev.bigdata.blackjack.*;
 
 /**
@@ -14,12 +15,26 @@ public class Demo {
 
     public static void main(String[] args) {
     	Player[] players = new Player[] {
+/*
 				new Player("Aice"),
 				new Player("Bob"),
 				new Player("Charlie"),
 				new Player("Dave"),
 				new Player("Ellen"),
-				new Player("Frank")
+				new Player("Frank"),
+				new Player("Mori", new Topse30050AI())
+*/
+/*
+    			new Player("No.1"),
+    			new Player("No.2"),
+    			new Player("No.3"),
+    			new Player("No.4"),
+*/
+
+                new Player("No.1"),
+                new Player("No.2"),
+                new Player("AI", new Topse30050AI()),
+                new Player("No.4"),
 		};
 		Demo demo = new Demo(players);
 		demo.eval();
@@ -31,7 +46,7 @@ public class Demo {
     }
 
     private void eval() {
-    	for (int i = 0; i < 1000;++i) {
+    	for (int i = 0; i < 8000;++i) {
     		doOneGame(players);
     	}
     }

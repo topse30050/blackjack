@@ -19,8 +19,8 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Topse30050Model {
-    private static final String TRAIN_DATA = "data/training-data.csv";
-//    private static final String TRAIN_DATA = "data/training-deck3.csv";
+//    private static final String TRAIN_DATA = "data/training-data.csv";
+    private static final String TRAIN_DATA = "data/training-deck3.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
     private static final String CLASSIFIER_MODEL_RESULT = "models/topse30050_result.model";
