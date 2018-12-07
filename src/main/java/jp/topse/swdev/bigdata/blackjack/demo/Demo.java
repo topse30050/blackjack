@@ -54,15 +54,16 @@ public class Demo {
 
     private void doOneGame(Player[] players) {
 //        Deck deck = Deck.createDefault();
-        //Deck deck = Deck.createTest1Deck();
+//        Deck deck = Deck.createTest1Deck();
 //        Deck deck = Deck.createTest2Deck();
-        Deck deck = Deck.createTest3Deck();
+//        Deck deck = Deck.createTest3Deck();
+        Deck deck = Deck.createTest4Deck();
 
         Game game = new Game(deck);
 
         for (Player player : players) {
             game.join(player);
-      }
+        }
         
         game.setup();
 

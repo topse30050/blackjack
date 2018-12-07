@@ -94,6 +94,24 @@ public class Deck {
         return new Deck(map);
     }
 
+    public static Deck createTest4Deck() {
+        Map<Card, Integer> map = new HashMap<Card, Integer>();
+        map.put(Card.TWO,   8);
+        map.put(Card.THREE, 8);
+        map.put(Card.FOUR,  7);
+        map.put(Card.FIVE,  7);
+        map.put(Card.SIX,   6);
+        map.put(Card.SEVEN, 6);
+        map.put(Card.EIGHT, 5);
+        map.put(Card.NINE,  5);
+        map.put(Card.TEN,   4);
+        map.put(Card.JACK,  3);
+        map.put(Card.QUEEN, 2);
+        map.put(Card.KING,  1);
+        map.put(Card.ACE,   1);
+        return new Deck(map);
+    }
+
     public interface RandomGenerator {
         public int nextInt(int bound);
     }
