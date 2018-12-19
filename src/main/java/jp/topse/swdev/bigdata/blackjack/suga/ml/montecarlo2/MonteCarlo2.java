@@ -8,7 +8,7 @@ import jp.topse.swdev.bigdata.blackjack.suga.ml.HandType;
 
 public class MonteCarlo2 {
 	/* ƒÃ-greedy–@‚Ì’TôŠm—¦ƒÃ */
-	private static final double EPSILON = 0.05;
+	private static final double EPSILON = 0.1;
 	/* WIN‚Ì•ñV */
 	public static final int WIN_REWARD = 100;
 	/* DRAW‚Ì•ñV */

@@ -15,11 +15,19 @@ public class Demo {
 
 	public static void main(String[] args) {
 		Player[] players = new Player[] {
-				new Player("monte", new MonteCarloDecisionMaker()),
 				new Player("suga", new SugaDecisionMaker()),
 				new Player("suga", new SugaDecisionMaker()),
 				new Player("suga", new SugaDecisionMaker()),
-				};
+				new Player("suga", new SugaDecisionMaker()),
+		// new Player("monte2", new MonteCarlo2DecisionMaker(
+		// "models/suga/monte2.csv")),
+		// new Player("monte2", new MonteCarlo2DecisionMaker(
+		// "models/suga/monte2.csv")),
+		// new Player("monte2", new MonteCarlo2DecisionMaker(
+		// "models/suga/monte2.csv")),
+		// new Player("monte2", new MonteCarlo2DecisionMaker(
+		// "models/suga/monte2.csv")),
+		};
 		Demo demo = new Demo(players);
 		demo.eval();
 	}
@@ -35,6 +43,9 @@ public class Demo {
 		int[] win = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		int[] draw = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		int[] lose = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		int winall = 0;
+		int drawall = 0;
+		int loseall = 0;
 		double winrate;
 		int defaultw = 0;
 		int defaultd = 0;
@@ -49,10 +60,13 @@ public class Demo {
 				Result.Type rt = result.getStandings().get(players[j]);
 				if (rt == Result.Type.WIN) {
 					win[j]++;
+					winall++;
 				} else if (rt == Result.Type.DRAW) {
 					draw[j]++;
+					drawall++;
 				} else if (rt == Result.Type.LOSE) {
 					lose[j]++;
+					loseall++;
 				}
 				if (i % 100000 == 0 && i != 0) {
 					winrate = (double) win[j] / (win[j] + lose[j]);
@@ -79,16 +93,20 @@ public class Demo {
 					System.out.println("[" + players[j].getName()
 							+ "] winrate: " + dfdbl1.format(winrate) + " ("
 							+ dfdbl2.format(winrate - defaultwr) + ")");
-					if (j != 0) {
-						wdiffs = wdiffs + win[j] - defaultw;
-						wrdiffs = wrdiffs + winrate - defaultwr;
-						System.out.println("wdiffs:  " + wdiffs);
-						System.out.println("wrdiffs: " + wrdiffs);
-					}
+					// if (j != 0) {
+					// wdiffs = wdiffs + win[j] - defaultw;
+					// wrdiffs = wrdiffs + winrate - defaultwr;
+					// System.out.println("wdiffs:  " + wdiffs);
+					// System.out.println("wrdiffs: " + wrdiffs);
+					// }
 					win[j] = 0;
 					draw[j] = 0;
 					lose[j] = 0;
 				}
+			}
+			if (i % 100000 == 0 && i != 0) {
+				System.out.println("winrate(all): " + (double) winall
+						/ (winall + loseall));
 			}
 		}
 		// learn.printQ();
