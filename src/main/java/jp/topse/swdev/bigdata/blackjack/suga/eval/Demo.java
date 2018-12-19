@@ -15,12 +15,11 @@ public class Demo {
 
 	public static void main(String[] args) {
 		Player[] players = new Player[] {
-				// new Player("default"),
-				// new Player("qlearn", new QLearningDecisionMaker()),
+				new Player("monte", new MonteCarloDecisionMaker()),
 				new Player("suga", new SugaDecisionMaker()),
-				// new Player("monte", new MonteCarloDecisionMaker()),
-				new Player("test", new MonteCarloDecisionMaker(
-						"models/suga/monte.csv")), };
+				new Player("suga", new SugaDecisionMaker()),
+				new Player("suga", new SugaDecisionMaker()),
+				};
 		Demo demo = new Demo(players);
 		demo.eval();
 	}
@@ -96,10 +95,7 @@ public class Demo {
 	}
 
 	private Result doOneGame(Player[] players) {
-		Deck deck = Deck.createDefault();
-		// Deck deck = Deck.createTest1Deck();
-		// Deck deck = Deck.createTest2Deck();
-		// Deck deck = Deck.createQLearningDeck();
+		Deck deck = Deck.createQLearningDeck();
 
 		Game game = new Game(deck);
 

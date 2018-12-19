@@ -11,8 +11,8 @@ import jp.topse.swdev.bigdata.blackjack.suga.ml.Deck;
  * Created by doi on 2017/09/28.
  */
 public class Demo {
-	private MonteCarlo	learn;
-	private Player[]	players	= null;
+	private MonteCarlo learn;
+	private Player[] players = null;
 
 	public Demo(Player[] players) {
 		this.players = players;
@@ -45,8 +45,9 @@ public class Demo {
 				String ctime = sdf.format(timestamp);
 				FileWriter fw;
 				try {
-					//					fw = new FileWriter("models/suga/monte_" + ctime + ".csv");
-					fw = new FileWriter("models/suga/monte_default.csv");
+					// fw = new FileWriter("models/suga/monte_" + ctime +
+					// ".csv");
+					fw = new FileWriter("models/suga/monte2.csv");
 					fw.write(learn.printQ());
 					fw.close();
 				} catch (IOException e) {
@@ -66,8 +67,7 @@ public class Demo {
 	}
 
 	private Result doOneGame(Player[] players, MonteCarlo learn) {
-		Deck deck = Deck.createDefault();
-		//		Deck deck = Deck.createTest3Deck();
+		Deck deck = Deck.createQLearningDeck();
 
 		Game game = new Game(deck);
 
@@ -79,14 +79,17 @@ public class Demo {
 
 		learn = game.start(learn);
 		Result result = game.result();
-//		System.out.println(result.toString());
+		// System.out.println(result.toString());
 		return result;
 	}
 
 	public static void main(String[] args) {
 		Player[] players = new Player[] {
-				new Player("learn1", new LearningDecisionMaker())
-		};
+				new Player("learn1", new LearningDecisionMaker()),
+				new Player("learn2", new LearningDecisionMaker()),
+//				new Player("learn3", new LearningDecisionMaker()),
+//				new Player("learn4", new LearningDecisionMaker()),
+				};
 		Demo demo = new Demo(players);
 		demo.eval();
 	}
