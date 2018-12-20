@@ -3,23 +3,25 @@ package jp.topse.swdev.bigdata.blackjack.topse30050;
 import jp.topse.swdev.bigdata.blackjack.Card;
 import jp.topse.swdev.bigdata.blackjack.Hand;
 import jp.topse.swdev.bigdata.blackjack.Result;
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.functions.LibSVM;
-import weka.core.*;
+import weka.classifiers.trees.J48;
+import weka.core.Attribute;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
+import weka.core.SparseInstance;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Topse30050Model {
-    private static final String TRAIN_DATA = "data/training-data.csv";
+    private static final String TRAIN_DATA = "data/train-201812.csv";
+//    private static final String TRAIN_DATA = "data/training-data.csv";
 //    private static final String TRAIN_DATA = "data/training-deck3.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
@@ -123,10 +125,10 @@ public class Topse30050Model {
 //        evalResult(modelNb, evalArff);
 //        System.out.println();
 //
-//        System.out.println("***** J48 *****");
-//        Classifier modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
-//        evalResult(modelJ48, evalArff);
-//        System.out.println();
+        System.out.println("***** J48 *****");
+        Classifier modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
+        evalResult(modelJ48, evalArff);
+        System.out.println();
 //
 //        System.out.println("***** RandomForest *****");
 //        Classifier modelRf = getBuiltClassifier(trainArff, new RandomForest());
@@ -147,14 +149,14 @@ public class Topse30050Model {
 //        Classifier modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
 //        evalResult(modelMP, evalArff);
 //        System.out.println();
+//
+//        System.out.println("***** SVM *****");
+//        Classifier modelSVM = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(modelSVM, evalArff);
+//        System.out.println();
 
-        System.out.println("***** SVM *****");
-        Classifier modelSVM = getBuiltClassifier(trainArff, new LibSVM());
-        evalResult(modelSVM, evalArff);
-        System.out.println();
 
-
-        aiModelResult = modelSVM;
+        aiModelResult = modelJ48;
         try {
             SerializationHelper.write(CLASSIFIER_MODEL_RESULT, aiModelResult);
         } catch (Exception e) {
@@ -171,14 +173,14 @@ public class Topse30050Model {
 //        writeArff(evalArff, EVAL_ARFF);
 
 //        System.out.println("***** NaiveBayes *****");
-//        Classifier modelNb = getBuiltClassifier(trainArff, new NaiveBayes());
+//        modelNb = getBuiltClassifier(trainArff, new NaiveBayes());
 //        evalResult(modelNb, evalArff);
 //        System.out.println();
 //
-//        System.out.println("***** J48 *****");
-//        modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
-//        evalResult(modelJ48, evalArff);
-//        System.out.println();
+        System.out.println("***** J48 *****");
+        modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
+        evalResult(modelJ48, evalArff);
+        System.out.println();
 //
 //        System.out.println("***** RandomForest *****");
 //        modelRf = getBuiltClassifier(trainArff, new RandomForest());
@@ -186,27 +188,27 @@ public class Topse30050Model {
 //        System.out.println();
 //
 //        System.out.println("***** Logistic *****");
-//        Classifier modelLogi = getBuiltClassifier(trainArff, new Logistic());
+//        modelLogi = getBuiltClassifier(trainArff, new Logistic());
 //        evalResult(modelLogi, evalArff);
 //        System.out.println();
 //
 //        System.out.println("***** SMO *****");
-//        Classifier modelSMO = getBuiltClassifier(trainArff, new SMO());
+//        modelSMO = getBuiltClassifier(trainArff, new SMO());
 //        evalResult(modelSMO, evalArff);
 //        System.out.println();
 //
 //        System.out.println("***** Multilayer Perceptron *****");
-//        Classifier modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
+//        modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
 //        evalResult(modelMP, evalArff);
 //        System.out.println();
+//
+//        System.out.println("***** SVM *****");
+//        modelSVM = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(modelSVM, evalArff);
+//        System.out.println();
 
-        System.out.println("***** SVM *****");
-        modelSVM = getBuiltClassifier(trainArff, new LibSVM());
-        evalResult(modelSVM, evalArff);
-        System.out.println();
 
-
-        aiModelBust = modelSVM;
+        aiModelBust = modelJ48;
         try {
             SerializationHelper.write(CLASSIFIER_MODEL_BUST, aiModelBust);
         } catch (Exception e) {
@@ -216,19 +218,19 @@ public class Topse30050Model {
 
 
     private static Instances dataResult2arff(List<DataModelResult> data) {
-        FastVector classValues = new FastVector();
+        List<String> classValues = new ArrayList<>();
         for (Result.Type classValue : CLASS_VALUES_RESULT) {
-            classValues.addElement(classValue.name());
+            classValues.add(classValue.name());
         }
 
-        FastVector attributes = new FastVector();
-        attributes.addElement(new Attribute("Dealer Up Card"));
-        attributes.addElement(new Attribute("Hand 1"));
-        attributes.addElement(new Attribute("Hand 2"));
-        attributes.addElement(new Attribute("Hand 3"));
-        attributes.addElement(new Attribute("Hand 4"));
-        attributes.addElement(new Attribute("Hand 5"));
-        attributes.addElement(new Attribute("Predict Result", classValues));
+        ArrayList<Attribute> attributes = new ArrayList<>();
+        attributes.add(new Attribute("Dealer Up Card"));
+        attributes.add(new Attribute("Hand 1"));
+        attributes.add(new Attribute("Hand 2"));
+        attributes.add(new Attribute("Hand 3"));
+        attributes.add(new Attribute("Hand 4"));
+        attributes.add(new Attribute("Hand 5"));
+        attributes.add(new Attribute("Predict Result", classValues));
 
         Instances arff = new Instances("Data", attributes, 0);
         arff.setClassIndex(arff.numAttributes() - 1);
@@ -242,24 +244,22 @@ public class Topse30050Model {
             values[4] = d.hand4;
             values[5] = d.hand5;
             values[6] = arff.attribute(6).indexOfValue(d.result.name());
-            arff.add(new Instance(1.0, values));
+            arff.add(new SparseInstance(1.0, values));
         });
 
         return arff;
     }
     private static Instances dataBust2arff(List<DataModelBust> data) {
-        FastVector classValues = new FastVector();
-        for (String classValue : CLASS_VALUES_BUST) {
-            classValues.addElement(classValue);
-        }
+        List<String> classValues = new ArrayList<>();
+        Collections.addAll(classValues, CLASS_VALUES_BUST);
 
-        FastVector attributes = new FastVector();
-        attributes.addElement(new Attribute("Hand 1"));
-        attributes.addElement(new Attribute("Hand 2"));
-        attributes.addElement(new Attribute("Hand 3"));
-        attributes.addElement(new Attribute("Hand 4"));
-        attributes.addElement(new Attribute("Hand 5"));
-        attributes.addElement(new Attribute("IS BUST", classValues));
+        ArrayList<Attribute> attributes = new ArrayList<>();
+        attributes.add(new Attribute("Hand 1"));
+        attributes.add(new Attribute("Hand 2"));
+        attributes.add(new Attribute("Hand 3"));
+        attributes.add(new Attribute("Hand 4"));
+        attributes.add(new Attribute("Hand 5"));
+        attributes.add(new Attribute("IS BUST", classValues));
 
         Instances arff = new Instances("Data", attributes, 0);
         arff.setClassIndex(arff.numAttributes() - 1);
@@ -272,7 +272,7 @@ public class Topse30050Model {
             values[3] = d.hand4;
             values[4] = d.hand5;
             values[5] = arff.attribute(5).indexOfValue(d.isBustStr);
-            arff.add(new Instance(1.0, values));
+            arff.add(new SparseInstance(1.0, values));
         });
 
         return arff;
@@ -289,9 +289,9 @@ public class Topse30050Model {
 //        }
 //    }
 
-    private static Classifier getBuiltClassifier(Instances arff, Classifier classifier, String... options) {
+    private static Classifier getBuiltClassifier(Instances arff, AbstractClassifier classifier, String... options) {
         try {
-            if (options != null) {
+            if (options.length > 0) {
                 classifier.setOptions(options);
             }
             classifier.buildClassifier(arff);
