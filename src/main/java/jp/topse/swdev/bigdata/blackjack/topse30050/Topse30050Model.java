@@ -6,8 +6,11 @@ import jp.topse.swdev.bigdata.blackjack.Result;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.functions.LibSVM;
-import weka.core.*;
+import weka.classifiers.trees.J48;
+import weka.core.Attribute;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
+import weka.core.SparseInstance;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +20,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Topse30050Model {
-    private static final String TRAIN_DATA = "data/training-data.csv";
+    private static final String TRAIN_DATA = "data/train-201812.csv";
+//    private static final String TRAIN_DATA = "data/training-data.csv";
 //    private static final String TRAIN_DATA = "data/training-deck3.csv";
 //    private static final String TRAIN_ARFF = "data/train.arff";
 //    private static final String EVAL_ARFF = "data/eval.arff";
@@ -121,10 +125,10 @@ public class Topse30050Model {
 //        evalResult(modelNb, evalArff);
 //        System.out.println();
 //
-//        System.out.println("***** J48 *****");
-//        Classifier modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
-//        evalResult(modelJ48, evalArff);
-//        System.out.println();
+        System.out.println("***** J48 *****");
+        Classifier modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
+        evalResult(modelJ48, evalArff);
+        System.out.println();
 //
 //        System.out.println("***** RandomForest *****");
 //        Classifier modelRf = getBuiltClassifier(trainArff, new RandomForest());
@@ -145,14 +149,14 @@ public class Topse30050Model {
 //        Classifier modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
 //        evalResult(modelMP, evalArff);
 //        System.out.println();
+//
+//        System.out.println("***** SVM *****");
+//        Classifier modelSVM = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(modelSVM, evalArff);
+//        System.out.println();
 
-        System.out.println("***** SVM *****");
-        Classifier modelSVM = getBuiltClassifier(trainArff, new LibSVM());
-        evalResult(modelSVM, evalArff);
-        System.out.println();
 
-
-        aiModelResult = modelSVM;
+        aiModelResult = modelJ48;
         try {
             SerializationHelper.write(CLASSIFIER_MODEL_RESULT, aiModelResult);
         } catch (Exception e) {
@@ -169,14 +173,14 @@ public class Topse30050Model {
 //        writeArff(evalArff, EVAL_ARFF);
 
 //        System.out.println("***** NaiveBayes *****");
-//        Classifier modelNb = getBuiltClassifier(trainArff, new NaiveBayes());
+//        modelNb = getBuiltClassifier(trainArff, new NaiveBayes());
 //        evalResult(modelNb, evalArff);
 //        System.out.println();
 //
-//        System.out.println("***** J48 *****");
-//        modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
-//        evalResult(modelJ48, evalArff);
-//        System.out.println();
+        System.out.println("***** J48 *****");
+        modelJ48 =getBuiltClassifier(trainArff, new J48(), "-U");
+        evalResult(modelJ48, evalArff);
+        System.out.println();
 //
 //        System.out.println("***** RandomForest *****");
 //        modelRf = getBuiltClassifier(trainArff, new RandomForest());
@@ -184,27 +188,27 @@ public class Topse30050Model {
 //        System.out.println();
 //
 //        System.out.println("***** Logistic *****");
-//        Classifier modelLogi = getBuiltClassifier(trainArff, new Logistic());
+//        modelLogi = getBuiltClassifier(trainArff, new Logistic());
 //        evalResult(modelLogi, evalArff);
 //        System.out.println();
 //
 //        System.out.println("***** SMO *****");
-//        Classifier modelSMO = getBuiltClassifier(trainArff, new SMO());
+//        modelSMO = getBuiltClassifier(trainArff, new SMO());
 //        evalResult(modelSMO, evalArff);
 //        System.out.println();
 //
 //        System.out.println("***** Multilayer Perceptron *****");
-//        Classifier modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
+//        modelMP = getBuiltClassifier(trainArff, new MultilayerPerceptron(), "-L", "0.5", "-M", "0.1");
 //        evalResult(modelMP, evalArff);
 //        System.out.println();
+//
+//        System.out.println("***** SVM *****");
+//        modelSVM = getBuiltClassifier(trainArff, new LibSVM());
+//        evalResult(modelSVM, evalArff);
+//        System.out.println();
 
-        System.out.println("***** SVM *****");
-        modelSVM = getBuiltClassifier(trainArff, new LibSVM());
-        evalResult(modelSVM, evalArff);
-        System.out.println();
 
-
-        aiModelBust = modelSVM;
+        aiModelBust = modelJ48;
         try {
             SerializationHelper.write(CLASSIFIER_MODEL_BUST, aiModelBust);
         } catch (Exception e) {
@@ -287,7 +291,7 @@ public class Topse30050Model {
 
     private static Classifier getBuiltClassifier(Instances arff, AbstractClassifier classifier, String... options) {
         try {
-            if (options != null) {
+            if (options.length > 0) {
                 classifier.setOptions(options);
             }
             classifier.buildClassifier(arff);
