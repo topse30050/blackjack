@@ -1,5 +1,10 @@
 package jp.topse.swdev.bigdata.blackjack;
 
+import jp.topse.swdev.bigdata.blackjack.suga.SugaDecisionMaker;
+import jp.topse.swdev.bigdata.blackjack.topse30015.Topse30015;
+import jp.topse.swdev.bigdata.blackjack.topse30020.Topse30020;
+import jp.topse.swdev.bigdata.blackjack.topse30050.Topse30050AI;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +30,13 @@ public class Competition {
         try {
             logger = new PrintWriter(new BufferedWriter(new FileWriter("./logs/" + index + ".csv", false)));
 
-            Deck deck = Deck.createTestDeck(index);
+            Deck deck = Deck.createTest5Deck();
+//            Deck deck = Deck.createTestDeck(index);
             Player[] players = new Player[]{
-                new Player("Aice"), 
-                new Player("Bob"), 
-                new Player("Charlie"),
-                new Player("Dave"), 
-                new Player("Ellen"), 
-                new Player("Frank")
+                new Player("topse30015", new Topse30015()),
+                new Player("topse30020", new Topse30020()),
+                new Player("topse30050", new Topse30050AI()),
+                new Player("topseSuga",  new SugaDecisionMaker()),
             };
             Map<Player, Integer> pointsMap = eval(players, deck, logger);
             showResult("Game " + index, pointsMap);
@@ -52,7 +56,7 @@ public class Competition {
         Permutations<Player> permutations = new Permutations<Player>(players);
         while (permutations.hasNext()) {
             Player[] list = permutations.next();
-            for (int i = 0; i < 1; ++i) {
+            for (int i = 0; i < 100; ++i) {
                 Map<Player, Result.Type> standings = doOneGame(list, deck, logger);
                 for (Player player : players) {
                     if (standings.get(player) == Result.Type.WIN) {

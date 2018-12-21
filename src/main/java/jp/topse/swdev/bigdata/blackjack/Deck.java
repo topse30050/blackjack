@@ -112,6 +112,24 @@ public class Deck {
         return new Deck(map);
     }
 
+    public static Deck createTest5Deck() {
+        Map<Card, Integer> map = new HashMap<Card, Integer>();
+        map.put(Card.TWO,   8);
+        map.put(Card.THREE, 8);
+        map.put(Card.FOUR,  8);
+        map.put(Card.FIVE,  8);
+        map.put(Card.SIX,   8);
+        map.put(Card.SEVEN, 1);
+        map.put(Card.EIGHT, 1);
+        map.put(Card.NINE,  1);
+        map.put(Card.TEN,   1);
+        map.put(Card.JACK,  1);
+        map.put(Card.QUEEN, 1);
+        map.put(Card.KING,  1);
+        map.put(Card.ACE,   8);
+        return new Deck(map);
+    }
+
     public interface RandomGenerator {
         public int nextInt(int bound);
     }

@@ -113,22 +113,23 @@ public class Demo {
 	}
 
 	private Result doOneGame(Player[] players) {
-		Deck deck = Deck.createQLearningDeck();
-
-		Game game = new Game(deck);
-
-		for (Player player : players) {
-			game.join(player);
-		}
-
-		game.setup();
-
-		game.start();
-
-		Result result = game.result();
-
-		// System.out.println(result.toString());
-
-		return result;
+		return null;
+//		Deck deck = Deck.createQLearningDeck();
+//
+//		Game game = new Game(deck);
+//
+//		for (Player player : players) {
+//			game.join(player);
+//		}
+//
+//		game.setup();
+//
+//		game.start();
+//
+//		Result result = game.result();
+//
+//		// System.out.println(result.toString());
+//
+//		return result;
 	}
 }

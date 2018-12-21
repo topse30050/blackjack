@@ -1,0 +1,8 @@
+@RELATION date
+
+@ATTRIBUTE Dealer REAL
+@ATTRIBUTE Player REAL
+@ATTRIBUTE class   {0,1,2}
+
+@DATA
+2,20,0

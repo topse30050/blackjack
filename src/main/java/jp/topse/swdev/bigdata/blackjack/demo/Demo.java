@@ -31,18 +31,18 @@ public class Demo {
     }
 
     private void eval() {
-    	for (int i = 0; i < 10000; ++i) {
+    	for (int i = 0; i < 100000; ++i) {
     		doOneGame(players);
     	}
     }
-    
 
     private void doOneGame(Player[] players) {
 //        Deck deck = Deck.createDefault();
 //        Deck deck = Deck.createTest1Deck();
 //        Deck deck = Deck.createTest2Deck();
 //        Deck deck = Deck.createTest3Deck();
-        Deck deck = Deck.createTest4Deck();
+//        Deck deck = Deck.createTest4Deck();
+        Deck deck = Deck.createTest5Deck();
 
         Game game = new Game(deck);
 
