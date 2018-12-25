@@ -57,7 +57,8 @@ public class Demo {
 //        Deck deck = Deck.createTest1Deck();
 //        Deck deck = Deck.createTest2Deck();
 //        Deck deck = Deck.createTest3Deck();
-        Deck deck = Deck.createTest4Deck();
+//        Deck deck = Deck.createTest4Deck();
+        Deck deck = Deck.createTest5Deck();
 
         Game game = new Game(deck);
 

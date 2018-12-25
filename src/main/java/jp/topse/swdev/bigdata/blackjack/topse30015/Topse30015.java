@@ -54,10 +54,10 @@ public class Topse30015 implements DecisionMaker {
     cardKind.addElement("NONE");
 
     FastVector result = new FastVector(2);
-    result.addElement("burst");
-    result.addElement("non-burst");
+    result.addElement("stand");
+    result.addElement("hit");
 
-    Instance instance = new DenseInstance(13);
+    Instance instance = new DenseInstance(14);
     Attribute dealer = new Attribute("dealer", cardKind, 0);
     Attribute[] players = new Attribute[8];
     players[0] = new Attribute("player1-1", cardKind, 1);
@@ -68,11 +68,12 @@ public class Topse30015 implements DecisionMaker {
     players[5] = new Attribute("player3-2", cardKind, 6);
     players[6] = new Attribute("player4-1", cardKind, 7);
     players[7] = new Attribute("player4-2", cardKind, 8);
-    Attribute[] addCards = new Attribute[2];
+    Attribute[] addCards = new Attribute[3];
     addCards[0] = new Attribute("card-1", cardKind, 9);
     addCards[1] = new Attribute("card-2", cardKind, 10);
-    Attribute total = new Attribute("total", 11);
-    Attribute take = new Attribute("result", result, 12);
+    addCards[2] = new Attribute("card-3", cardKind, 11);
+    Attribute total = new Attribute("total", 12);
+    Attribute take = new Attribute("result", result, 13);
 
     instance.setValue(dealer, game.getUpCard().toString());
     int i = 0;
@@ -83,11 +84,12 @@ public class Topse30015 implements DecisionMaker {
       ++i;
     }
 
-    String[] cards = new String[2];
+    String[] cards = new String[3];
     cards[0] = "NONE";
     cards[1] = "NONE";
+    cards[2] = "NONE";
     for (int j = 2; j < myHand.getCount(); ++j) {
-    	if (j == 4) break;
+    	if (j == 5) break;
     	cards[j - 2] = myHand.get(j).toString();
     }
     for (int j = 0; j < 2; ++j) {
